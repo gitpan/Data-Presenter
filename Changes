@@ -1,0 +1,9 @@
+Revision history for Perl extension Data::Presenter
+
+0.60	Sat Apr 12 2003
+	- Begin preparation for public distribution.
+
+0.61	Sat Apr 12 2003
+	- Corrected failure to list Data::Presenter::Combo in MANIFEST.
+	- Created results/README.
+

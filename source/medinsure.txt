@@ -1,0 +1,16 @@
+CLIENT MEDICAL INSURANCE STATUS
+AS OF JULY 1, 2001
+ALL INFORMATION IS CONFIDENTIAL ! ! !
+
+    NAME                               C. NO.     STATE       MEDICARE       MD'CAID
+
+    ADAMS            GEORGIE           210297     2089297                    LM84291J
+    BOUBAKAR         ALI               456892     1378742
+    CHIN             MAO-TSE           399901                 990887776C12
+    DOVER            DILSON            399723                                AB82376T
+    MARESH           TIMOTHY           392877     2089200                    TS84368G
+    VASQUEZ          JORGE             456787     1163582     990999876A     XQ95432K
+    VASQUEZ          JOAQUIN           456789     1056410     990994567C2
+    VASQUEZ          LEONARDO          456788     1039642                    AW45329T
+    WESTINGHOUSE     GEORGE            456600      894567     990993214M
+
