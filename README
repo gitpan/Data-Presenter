@@ -1,14 +1,14 @@
 Data::Presenter - Present data stored in hashes of arrays
 
-This document refers to version 0.64 of Data::Presenter.  This version was
-released October 5, 2003.
+This document refers to version 0.65 of Data::Presenter.  This version was
+released June 2, 2004.
 
 To install this module on your system, place the tarball archive file in a 
 temporary directory and call the following:
 
-% gunzip Data-Presenter-0.64.tar.gz
-% tar xf Data-Presenter-0.64.tar
-% cd Data-Presenter-0.64
+% gunzip Data-Presenter-0.65.tar.gz
+% tar xf Data-Presenter-0.65.tar
+% cd Data-Presenter-0.65
 % perl Makefile.PL
 % make
 % make test
@@ -28,6 +28,19 @@ above:
 If you are installing this module on a Win32 system with 'nmake', 
 substitute 'nmake' for 'make' in the sequence of commands above.
 
+The author has found that trying to install this distribution with 
+(a) older (pre-6.16) versions of ExtUtils::MakeMaker, (b) on older 
+versions of Perl (e.g., 5.6.0), and (c) on older Linux distributions 
+(e.g., RedHat Linux 7.3) can result in a situation where the module's 
+Plain Old Documentation, when transformed into manual pages, is not 
+automatically placed in the optimal location for reading thru 'man' 
+and 'info' (even though it reads perfectly through 'perldoc').  If you 
+experience this problem, issue the following at the command line 
+(adapted from a suggestion by Michael Schwern on the module-authors 
+mailing list):
+
+% perl Makefile.PL INSTALLSITEMAN3DIR=/usr/share/man/man3
+
 Data::Presenter uses the Carp module which is part of the standard Perl 
 distribution.  Data::Presenter also uses the List::Compare module by 
 the same author.  This module is available from CPAN; versions 0.15 
@@ -43,13 +56,10 @@ installed when you install Data::Presenter.  Once you master the
 principles of creating a Data::Presenter invocant subclass you may 
 delete these sample files.
 
-From time to time the author writes articles discussing Data::Presenter.  
-These articles will be available at http://www.concentric.net/~Jkeen/data.
-
 Author:  James E. Keenan (jkeenan@cpan.org).
 Creation date:  October 25, 2001.  
-Last modification date:  October 5, 2003.  
-Copyright (c) 2001-2003 James E. Keenan.  United States.  All rights 
+Last modification date:  June 2, 2004.  
+Copyright (c) 2001-2004 James E. Keenan.  United States.  All rights 
 reserved.  This is free software and may be distributed under the 
 same terms as Perl itself.
 

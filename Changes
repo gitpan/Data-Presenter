@@ -15,3 +15,6 @@ Revision history for Perl extension Data::Presenter
 0.64	Sun Oct  5 2003
 	- Added method get_keys_seen();
 
+0.65    Tue Jun  2 2004
+	- Corrected Intersect.pm and Union.pm to avoid "Bizarre array assignment" error when installing under Perl 5.8.4 on Darwin.
+

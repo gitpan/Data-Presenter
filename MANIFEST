@@ -27,5 +27,6 @@ t/03.t
 t/04.t
 t/05.t
 t/Test/DataPresenterSpecial.pm
-META.yml
 
+
+META.yml                                Module meta-data (added by MakeMaker)

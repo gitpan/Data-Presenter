@@ -1,5 +1,5 @@
 package Data::Presenter;
-$VERSION = 0.64;    # 10/5/2003
+$VERSION = 0.65;    # 10/5/2003
 use strict;
 use warnings;
 use List::Compare;
@@ -1132,7 +1132,7 @@ Data::Presenter
 
 =head1 VERSION
 
-This document refers to version 0.64 of Data::Presenter, which consists of Data::Presenter.pm and various packages subclassed thereunder, most notably Data::Presenter::Combo.pm and its subclasses Data::Presenter::Combo::Intersect.pm and Data::Presenter::Combo::Union.pm.  This version was released October 5, 2003.
+This document refers to version 0.65 of Data::Presenter, which consists of Data::Presenter.pm and various packages subclassed thereunder, most notably Data::Presenter::Combo.pm and its subclasses Data::Presenter::Combo::Intersect.pm and Data::Presenter::Combo::Union.pm.  This version was released June 2, 2004.
 
 =head1 SYNOPSIS
 
@@ -2661,6 +2661,10 @@ v0.63 (8/24/03):  Created C<&seen_one_column>.
 
 v0.64 (10/5/03):  Created C<&get_keys_seen>.
 
+=item *
+
+v0.65 (6/2/04):  Corrected 1 line of code in each of Intersect.pm and Union.pm which was generating error "Bizarre copy of array" when testing under Perl 5.8.4 on Darwin.
+
 =back
 
 Possible future lines of development include:
@@ -2707,7 +2711,7 @@ The discussion of bugs in this program benefitted from discussions on the Perl S
 
 James E. Keenan (jkeenan@cpan.org).
 
-Creation date:  October 25, 2001.  Last modification date:  October 5, 2003.  Copyright (c) 2001-2003 James E. Keenan.  United States.  All rights reserved.
+Creation date:  October 25, 2001.  Last modification date:  June 2, 2004.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
 
 All data presented in this documentation or in the sample files in the archive accompanying this documentation are dummy copy.  The data was entirely fabricated by the author for heuristic purposes.  Any resemblance to any person, living or dead, is coincidental.
 

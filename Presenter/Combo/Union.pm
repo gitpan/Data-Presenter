@@ -1,5 +1,5 @@
 package Data::Presenter::Combo::Union;
-$VERSION = 0.63; # 8/24/03
+$VERSION = 0.65; # 06/02/2004
 @ISA = qw(Data::Presenter::Combo);
 use strict;
 use warnings;
@@ -57,7 +57,7 @@ sub _merge_engine {
     }
 
     # Work thru the 3 look-up tables to assign values
-    my @values = my @temp = ();
+    my (@values, @temp);
     my $null = '';
     foreach my $n (sort keys %seenbaseonly) {
         @values = ();
@@ -112,7 +112,7 @@ Data::Presenter::Combo::Union
 
 =head1 VERSION
 
-This document refers to version 0.63 of Data::Presenter::Combo::Intersect, released August 24, 2003.
+This document refers to version 0.65 of Data::Presenter::Combo::Union, released June 2, 2004. 
 
 =head1 DESCRIPTION
 
@@ -132,13 +132,17 @@ v0.60 (4/6/03):  Version number was advanced to 0.60 to be consistent with steps
 
 v0.61 (4/12/03):  First version uploaded to CPAN.
 
+=item *
+
+v0.65 (6/2/04):  Changed line of code to avoid "Bizarre array assignment error when installing on Darwin on Perl 5.8.4.
+
 =back
 
 =head1 AUTHOR
 
 James E. Keenan (jkeenan@cpan.org).
 
-Creation date:  October 28, 2001.  Last modification date:  August 24, 2003.  Copyright (c) 2001-3 James E. Keenan.  United States.  All rights reserved.
+Creation date:  October 28, 2001.  Last modification date:  June 2, 2004.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
 
 All data presented in this documentation or in the sample files in the archive accompanying this documentation are dummy copy.  The data was entirely fabricated by the author for heuristic purposes.  Any resemblance to any person, living or dead, is coincidental.
 
