@@ -1,5 +1,5 @@
 package Data::Presenter;
-$VERSION = 0.63;    # 8/24/03
+$VERSION = 0.64;    # 10/5/2003
 use strict;
 use warnings;
 use List::Compare;
@@ -150,6 +150,16 @@ sub get_keys {
         push(@keys, $_) unless ($reserved{$_});
     }
     return [ sort @keys ];
+}
+
+sub get_keys_seen {
+    my $self = shift;
+    my %data = %$self;
+    my (%seen);
+    foreach (keys %data) {
+        $seen{$_}++ unless ($reserved{$_});
+    }
+    return \%seen;
 }
 
 ################################################################################
@@ -1122,7 +1132,7 @@ Data::Presenter
 
 =head1 VERSION
 
-This document refers to version 0.63 of Data::Presenter, which consists of Data::Presenter.pm and various packages subclassed thereunder, most notably Data::Presenter::Combo.pm and its subclasses Data::Presenter::Combo::Intersect.pm and Data::Presenter::Combo::Union.pm.  This version was released August 24, 2003.
+This document refers to version 0.64 of Data::Presenter, which consists of Data::Presenter.pm and various packages subclassed thereunder, most notably Data::Presenter::Combo.pm and its subclasses Data::Presenter::Combo::Intersect.pm and Data::Presenter::Combo::Union.pm.  This version was released October 5, 2003.
 
 =head1 SYNOPSIS
 
@@ -1155,6 +1165,8 @@ Get information about the Data::Presenter::[Package1] object itself.
     $dp1->print_data_count();
 
     my $keysref = $dp1->get_keys();
+
+    my $seenref = $dp1->get_keys_seen();
 
 =item *
 
@@ -1676,6 +1688,13 @@ I<&get_keys>:  Returns a reference to an array whose elements are an ASCII-betic
 
     my $keysref = $dp1->get_keys();
     print "Current data points are:  @$keysref\n";
+
+I<&get_keys_seen>:  Returns a reference to a hash whose elements are key-value pairs where the key is the key of an element blessed into the Data::Presenter::[Package1] object and the value is 1, indicating that the key has been seen (a 'seen-hash').  This list does not include those elements whose keys are reserved words.  This method takes no arguments and returns only the hash reference described.
+
+    my $seenref = $dp1->get_keys_seen();
+    print "Current data points are:  ";
+    print "$_ " foreach (sort keys %{$seenref});
+    print "\n";
 
 =head2 Data::Presenter Selection, Sorting and Output Methods
 
@@ -2638,6 +2657,10 @@ v0.61 (4/12/03):  Corrected failure to list F<Data::Presenter::Combo> in MANIFES
 
 v0.63 (8/24/03):  Created C<&seen_one_column>.
 
+=item *
+
+v0.64 (10/5/03):  Created C<&get_keys_seen>.
+
 =back
 
 Possible future lines of development include:
@@ -2684,7 +2707,7 @@ The discussion of bugs in this program benefitted from discussions on the Perl S
 
 James E. Keenan (jkeenan@cpan.org).
 
-Creation date:  October 25, 2001.  Last modification date:  August 24, 2003.  Copyright (c) 2001-2003 James E. Keenan.  United States.  All rights reserved.
+Creation date:  October 25, 2001.  Last modification date:  October 5, 2003.  Copyright (c) 2001-2003 James E. Keenan.  United States.  All rights reserved.
 
 All data presented in this documentation or in the sample files in the archive accompanying this documentation are dummy copy.  The data was entirely fabricated by the author for heuristic purposes.  Any resemblance to any person, living or dead, is coincidental.
 

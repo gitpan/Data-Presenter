@@ -12,3 +12,6 @@ Revision history for Perl extension Data::Presenter
 0.63	Sun Aug 24 2003
 	- Added method seen_one_column();
 
+0.64	Sun Oct  5 2003
+	- Added method get_keys_seen();
+
