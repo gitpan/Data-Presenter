@@ -1,5 +1,5 @@
 package Data::Presenter::SampleCensus;
-$VERSION = 0.65; # 06/02/2004
+$VERSION = 0.66; # 06/09/2004
 @ISA = qw(Data::Presenter);
 use strict;
 
@@ -114,7 +114,7 @@ Data::Presenter::SampleCensus
 
 =head1 VERSION
 
-This document refers to version 0.65 of Data::Presenter::SampleCensus, released June 2, 2004. 
+This document refers to version 0.66 of Data::Presenter::SampleCensus, released June 9, 2004. 
 
 =head1 DESCRIPTION
 
@@ -154,7 +154,7 @@ v0.61 (4/12/03):  First version uploaded to CPAN.
 
 James E. Keenan (jkeenan@cpan.org).
 
-Creation date:  October 25, 2001.  Last modification date:  June 2, 2004.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
+Creation date:  October 25, 2001.  Last modification date:  June 9, 2004.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
 
 All data presented in this documentation or in the sample files in the archive accompanying this documentation are dummy copy.  The data was entirely fabricated by the author for heuristic purposes.  Any resemblance to any person, living or dead, is coincidental.
 
