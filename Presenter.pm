@@ -1,5 +1,5 @@
 package Data::Presenter;
-$VERSION = 0.66;    # 06/09/2004
+$VERSION = 0.68;    # 10/23/2004
 use strict;
 use warnings;
 use List::Compare;
@@ -318,7 +318,7 @@ sub _key_constructor {
         unless ($reserved{$k}) {
             my @temp = ();
             foreach my $i (@args) {
-                push @temp, ${%$self}{$k}->[$fieldlabels{$i}];
+                push @temp, ${$self}{$k}[$fieldlabels{$i}];
             }
             push @temp, $k;
             push(@keys, \@temp);
@@ -1002,8 +1002,10 @@ sub _format_argument_line_top2 {
             my $max = defined ${$reprocessref}{$args[$j]}
                     ? ${$reprocessref}{$args[$j]}
                     : $fp{$args[$j]}[0];
-            if (! ${@$p}[$j]) {
-                ${@$p}[$j] = ' ' x $max;
+#            if (! ${@$p}[$j]) {
+#                ${@$p}[$j] = ' ' x $max;
+            if (! ${$p}[$j]) {
+                ${$p}[$j] = ' ' x $max;
             }
         }
         my $part = join ' ', @$p;
@@ -1132,7 +1134,7 @@ Data::Presenter
 
 =head1 VERSION
 
-This document refers to version 0.66 of Data::Presenter, which consists of Data::Presenter.pm and various packages subclassed thereunder, most notably Data::Presenter::Combo.pm and its subclasses Data::Presenter::Combo::Intersect.pm and Data::Presenter::Combo::Union.pm.  This version was released June 9, 2004.
+This document refers to version 0.68 of Data::Presenter, which consists of Data::Presenter.pm and various packages subclassed thereunder, most notably Data::Presenter::Combo.pm and its subclasses Data::Presenter::Combo::Intersect.pm and Data::Presenter::Combo::Union.pm.  This version was released October 23, 2004.
 
 =head1 SYNOPSIS
 
@@ -2669,6 +2671,14 @@ v0.65 (6/2/04):  Corrected 1 line of code in each of Intersect.pm and Union.pm w
 
 v0.66 (6/9/04):  POD correction only:  Corrected error in POD for Data::Presenter::Sample Medinsure which resulted in bad POD-to-HTML translation and bad display on search.cpan.org
 
+= item *
+
+v0.67 (10/23/04):  Corrected substandard code at +322 Presenter.pm to avoid error "Bizarre copy of hash in leave" error when running tests under Devel::Cover
+
+= item *
+
+v0.68 (10/23/04): Corrected substandard code at +1005 Presenter.pm to avoid error "Bizarre copy of array" error when running tests under Devel::Cover
+
 =back
 
 Possible future lines of development include:
@@ -2715,7 +2725,7 @@ The discussion of bugs in this program benefitted from discussions on the Perl S
 
 James E. Keenan (jkeenan@cpan.org).
 
-Creation date:  October 25, 2001.  Last modification date:  June 9, 2004.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
+Creation date:  October 25, 2001.  Last modification date:  October 23, 2004.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
 
 All data presented in this documentation or in the sample files in the archive accompanying this documentation are dummy copy.  The data was entirely fabricated by the author for heuristic purposes.  Any resemblance to any person, living or dead, is coincidental.
 

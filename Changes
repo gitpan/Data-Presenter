@@ -21,3 +21,8 @@ Revision history for Perl extension Data::Presenter
 0.66    Wed Jun  9 2004
 	- POD correction only:  Corrected error in POD for Data::Presenter::Sample Medinsure which resulted in bad POD-to-HTML translation and bad display on search.cpan.org
 
+0.67    Sat Oct 23 2004
+	- Corrected substandard code at +322 Presenter.pm to avoid error "Bizarre copy of hash in leave" error when running tests under Devel::Cover
+
+0.68    Sat Oct 23 2004
+	- Corrected substandard code at +1005 Presenter.pm to avoid error "Bizarre copy of array" error when running tests under Devel::Cover
