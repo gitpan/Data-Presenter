@@ -5,7 +5,7 @@
 ######################### We start with some black magic to print on failure.
 
 BEGIN { 
-	$last_test_to_print = 78; 			# 04/08/2003
+	$last_test_to_print = 78;
 	$| = 1; 
 	print "1..$last_test_to_print\n"; } 
 END {print "not ok 1\n" unless $loaded;}

@@ -1,10 +1,11 @@
+# 02.t
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl test.pl'
 
 ######################### We start with some black magic to print on failure.
 
 BEGIN { 
-	$last_test_to_print = 67; 			# 04/08/2003
+	$last_test_to_print = 67;
 	$| = 1; 
 	print "1..$last_test_to_print\n"; } 
 END {print "not ok 1\n" unless $loaded;}

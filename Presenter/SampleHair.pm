@@ -1,5 +1,5 @@
 package Data::Presenter::SampleHair;
-$VERSION = 0.61; # 4/12/03
+$VERSION = 0.62; # 4/13/03
 @ISA = qw(Data::Presenter);
 use strict;
 
@@ -110,7 +110,7 @@ Data::Presenter::SampleHair
 
 =head1 VERSION
 
-This document refers to version 0.61 of Data::Presenter::SampleHair, released April 12, 2003.
+This document refers to version 0.62 of Data::Presenter::SampleHair, released April 13, 2003.
 
 =head1 DESCRIPTION
 
@@ -140,17 +140,22 @@ F<fields.hair.data>
 
 v0.60 (4/6/03):  Version number was advanced to 0.60 to be consistent with steps taken to prepare Data::Presenter for public distribution.
 
+=item *
+
+v0.61 (4/12/03):  First version uploaded to CPAN.
+
 =back
 
 =head1 AUTHOR
 
 James E. Keenan (jkeenan@cpan.org).
 
-Creation date:  October 25, 2001.  Last modification date:  April 12, 2003.  Copyright (c) 2001-3 James E. Keenan.  United States.  All rights reserved.
+Creation date:  October 25, 2001.  Last modification date:  April 13, 2003.  Copyright (c) 2001-3 James E. Keenan.  United States.  All rights reserved.
 
 All data presented in this documentation or in the sample files in the archive accompanying this documentation are dummy copy.  The data was entirely fabricated by the author for heuristic purposes.  Any resemblance to any person, living or dead, is coincidental.
 
 This is free software which you may distribute under the same terms as Perl itself.
 
 =cut 
+
 

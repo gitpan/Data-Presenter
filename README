@@ -1,14 +1,14 @@
-Data::Presenter - Compare elements of two or more lists
+Data::Presenter - Present data stored in hashes of arrays
 
-This document refers to version 0.61 of Data::Presenter.  This version was
-released April 12, 2003.
+This document refers to version 0.62 of Data::Presenter.  This version was
+released April 13, 2003.
 
 To install this module on your system, place the tarball archive file in a 
 temporary directory and call the following:
 
-% gunzip Data-Presenter-0.61.tar.gz
-% tar xf Data-Presenter-0.61.tar
-% cd Data-Presenter-0.61
+% gunzip Data-Presenter-0.62.tar.gz
+% tar xf Data-Presenter-0.62.tar
+% cd Data-Presenter-0.62
 % perl Makefile.PL
 % make
 % make test
@@ -33,15 +33,26 @@ distribution.  Data::Presenter also uses the List::Compare module by
 the same author.  This module is available from CPAN; versions 0.15 
 and later should be used.
 
+This distribution comes with four sample Data::Presenter subclass 
+modules which illustrate what is required for such a subclass.  In 
+addition, the distribution comes with four configuration files, one for 
+each sample subclass, which are required to construct a new 
+Data::Presenter subclass object.  The distribution comes with four 
+sourcefiles, one per subclass.  These sample subclasses are fully 
+installed when you install Data::Presenter.  Once you master the 
+principles of creating a Data::Presenter invocant subclass you may 
+delete these sample files.
+
 From time to time the author writes articles discussing Data::Presenter.  
 These articles will be available at http://www.concentric.net/~Jkeen/data.
 
 Author:  James E. Keenan (jkeenan@cpan.org).
 Creation date:  October 25, 2001.  
-Last modification date:  April 12, 2003.  
+Last modification date:  April 13, 2003.  
 Copyright (c) 2001-2003 James E. Keenan.  United States.  All rights 
 reserved.  This is free software and may be distributed under the 
 same terms as Perl itself.
+
 
 
 
