@@ -1,14 +1,14 @@
 Data::Presenter - Present data stored in hashes of arrays
 
-This document refers to version 0.62 of Data::Presenter.  This version was
-released April 13, 2003.
+This document refers to version 0.63 of Data::Presenter.  This version was
+released August 24, 2003.
 
 To install this module on your system, place the tarball archive file in a 
 temporary directory and call the following:
 
-% gunzip Data-Presenter-0.62.tar.gz
-% tar xf Data-Presenter-0.62.tar
-% cd Data-Presenter-0.62
+% gunzip Data-Presenter-0.63.tar.gz
+% tar xf Data-Presenter-0.63.tar
+% cd Data-Presenter-0.63
 % perl Makefile.PL
 % make
 % make test
@@ -48,7 +48,7 @@ These articles will be available at http://www.concentric.net/~Jkeen/data.
 
 Author:  James E. Keenan (jkeenan@cpan.org).
 Creation date:  October 25, 2001.  
-Last modification date:  April 13, 2003.  
+Last modification date:  August 24, 2003.  
 Copyright (c) 2001-2003 James E. Keenan.  United States.  All rights 
 reserved.  This is free software and may be distributed under the 
 same terms as Perl itself.

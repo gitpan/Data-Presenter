@@ -9,4 +9,6 @@ Revision history for Perl extension Data::Presenter
 0.62	Sun Apr 13 2003
 	- Corrected errors in documentation.
 
+0.63	Sun Aug 24 2003
+	- Added method seen_one_column();
 

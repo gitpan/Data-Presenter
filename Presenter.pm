@@ -1,5 +1,5 @@
 package Data::Presenter;
-$VERSION = 0.62;    # 4/13/03
+$VERSION = 0.63;    # 8/24/03
 use strict;
 use warnings;
 use List::Compare;
@@ -193,6 +193,23 @@ unique to each record to the \nlist of arguments requested.\nError was";
         }
     }
     return \%_sorted_fields;
+}
+
+sub seen_one_column {
+    my $self = shift;
+    my %data = %$self;
+    if (@_ != 1) {
+        warn "Invalid number of arguments to seen_one_column():  $!";
+        return 0;
+    }
+    my $argsref = [ shift ];
+    _validate_args($argsref, \%fp);
+    my (%seen);
+    foreach (keys %data) {
+        $seen{ $data{$_}[ $fieldlabels{ ${$argsref}[0] } ] }++
+            unless ($reserved{$_});
+    }
+    return \%seen;
 }
 
 sub _validate_args {
@@ -1105,7 +1122,7 @@ Data::Presenter
 
 =head1 VERSION
 
-This document refers to version 0.62 of Data::Presenter, which consists of Data::Presenter.pm and various packages subclassed thereunder, most notably Data::Presenter::Combo.pm and its subclasses Data::Presenter::Combo::Intersect.pm and Data::Presenter::Combo::Union.pm.  This version was released April 13, 2003.
+This document refers to version 0.63 of Data::Presenter, which consists of Data::Presenter.pm and various packages subclassed thereunder, most notably Data::Presenter::Combo.pm and its subclasses Data::Presenter::Combo::Intersect.pm and Data::Presenter::Combo::Union.pm.  This version was released August 24, 2003.
 
 =head1 SYNOPSIS
 
@@ -1178,6 +1195,12 @@ Select particular fields (columns) from a Data::Presenter::[Package1] object and
 
     @columns_selected = ('lastname', 'firstname', 'datebirth', 'cno');
     $sorted_data = $dp1->sort_by_column(\@columns_selected);
+
+=item *
+
+Select one field (column) from a Data::Presenter::[Package1] object and return a reference to a hash whose keys are the data observed in that column and whose values are the frequencies with which those data are observed, I<i.e.,> a 'seen-hash':
+
+    $seen_hash_ref = seen_one_column('ward');
 
 =item *
 
@@ -2611,6 +2634,10 @@ v0.60 (4/6/03):  Preparation for distribution to CPAN.
 
 v0.61 (4/12/03):  Corrected failure to list F<Data::Presenter::Combo> in MANIFEST.
 
+=item *
+
+v0.63 (8/24/03):  Created C<&seen_one_column>.
+
 =back
 
 Possible future lines of development include:
@@ -2657,7 +2684,7 @@ The discussion of bugs in this program benefitted from discussions on the Perl S
 
 James E. Keenan (jkeenan@cpan.org).
 
-Creation date:  October 25, 2001.  Last modification date:  April 13, 2003.  Copyright (c) 2001-2003 James E. Keenan.  United States.  All rights reserved.
+Creation date:  October 25, 2001.  Last modification date:  August 24, 2003.  Copyright (c) 2001-2003 James E. Keenan.  United States.  All rights reserved.
 
 All data presented in this documentation or in the sample files in the archive accompanying this documentation are dummy copy.  The data was entirely fabricated by the author for heuristic purposes.  Any resemblance to any person, living or dead, is coincidental.
 
