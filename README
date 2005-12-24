@@ -1,14 +1,14 @@
 Data::Presenter - Present data stored in hashes of arrays
 
-This document refers to version 0.68 of Data::Presenter.  This version was
-released October 23, 2004.
+This document refers to version 1.0 of Data::Presenter.  This version was
+released December 24, 2005.
 
 To install this module on your system, place the tarball archive file in a 
 temporary directory and call the following:
 
-% gunzip Data-Presenter-0.68.tar.gz
-% tar xf Data-Presenter-0.68.tar
-% cd Data-Presenter-0.68
+% gunzip Data-Presenter-1.0.tar.gz
+% tar xf Data-Presenter-1.0.tar
+% cd Data-Presenter-1.0
 % perl Makefile.PL
 % make
 % make test
@@ -44,10 +44,13 @@ mailing list):
 Data::Presenter uses the Carp module which is part of the standard Perl 
 distribution.  Data::Presenter also uses the List::Compare module by 
 the same author.  This module is available from CPAN; versions 0.15 
-and later should be used.
+and later should be used.  Data::Presenter's test suite uses CPAN modules
+IO::Capture and IO::Capture::Extended.  These modules are pure Perl and should
+install easily with the cpan utility.
 
-This distribution comes with four sample Data::Presenter subclass 
-modules which illustrate what is required for such a subclass.  In 
+For testing purposes, this distribution comes with four sample 
+Data::Presenter subclass modules (now located under the t/ directory) 
+which illustrate what is required for such a subclass.  In 
 addition, the distribution comes with four configuration files, one for 
 each sample subclass, which are required to construct a new 
 Data::Presenter subclass object.  The distribution comes with four 
@@ -58,7 +61,7 @@ delete these sample files.
 
 Author:  James E. Keenan (jkeenan@cpan.org).
 Creation date:  October 25, 2001.  
-Last modification date:  October 23, 2004.  
-Copyright (c) 2001-2004 James E. Keenan.  United States.  All rights 
+Last modification date:  December 24, 2005.  
+Copyright (c) 2001-2005 James E. Keenan.  United States.  All rights 
 reserved.  This is free software and may be distributed under the 
 same terms as Perl itself.

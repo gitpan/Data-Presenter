@@ -1,7 +1,8 @@
-# fields_census.data
+# fields.census.duplicate_field.data
 
 @fields = qw(
     lastname
+    firstname
     firstname
     cno
     unit

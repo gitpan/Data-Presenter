@@ -3,7 +3,13 @@ use ExtUtils::MakeMaker;
 # the contents of the Makefile that is written.
 WriteMakefile(
     'NAME'		=> 'Data::Presenter',
-    'VERSION_FROM'	=> 'Presenter.pm', # finds $VERSION
-    'PREREQ_PM'		=> { List::Compare => 0.15 }, 
+    'VERSION_FROM'	=> 'lib/Data/Presenter.pm',
+    'ABSTRACT_FROM'	=> 'lib/Data/Presenter.pm',
+    'PREREQ_PM'		=> { 
+        List::Compare           => 0.15,
+        IO::Capture             => 0.05,
+        IO::Capture::Extended   => 0.09,
+        Tie::File               => 0,
+    }, 
 );
 

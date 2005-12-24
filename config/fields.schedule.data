@@ -1,11 +1,11 @@
-# fields_schedule.data
+# fields.schedule.data
 
 @fields = qw(
 	groupid
 	room
 	timeslot
 	groupname
-	ward
+	ward_department
 	section
 	instructor
 	comment

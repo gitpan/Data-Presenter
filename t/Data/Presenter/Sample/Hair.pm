@@ -1,5 +1,5 @@
-package Data::Presenter::SampleHair;
-$VERSION = 0.68; # 10/23/2004
+package Data::Presenter::Sample::Hair;
+$VERSION = 1.0; # 12-24-2005
 @ISA = qw(Data::Presenter);
 use strict;
 
@@ -19,7 +19,7 @@ sub _init {
             push @paramvalues, \@{$parameters{$fields[$i]}};
     }
     $data{'parameters'} = [@paramvalues];
-    $data{'index'} = [$index];
+    $data{'index'} = $index;
 
     open(HAIR, $sourcefile) || die "cannot open $sourcefile for reading: $!";     
     while (<HAIR>) {
@@ -37,6 +37,11 @@ sub _init {
         my ($cno, $lastname, $firstname, $haircolor, $number) = 
             unpack("A6 xx A14 x A10 x A9 x A2", $_);
         # Data munging here as needed
+        $lastname =~ s/\s+$//;
+        $firstname =~ s/\s+$//;
+        $cno =~ s/^\s+//;
+        $haircolor =~ s/\s+$//;
+        $number =~ s/^\s+//;
         @corrected = ($cno, $lastname, $firstname, $haircolor, $number);
         # DATA MUNGING ENDS HERE
         $seen{$corrected[$index]}++;    # NEW!
@@ -106,17 +111,17 @@ sub _extract_rows{
 
 =head1 NAME
 
-Data::Presenter::SampleHair
+Data::Presenter::Sample::Hair
 
 =head1 VERSION
 
-This document refers to version 0.68 of Data::Presenter::SampleHair, released October 23, 2004. 
+This document refers to version 1.0 of Data::Presenter::Sample::Hair, released December 24, 2005. 
 
 =head1 DESCRIPTION
 
-This package is a sample subclass of, and inherits from, Data::Presenter.  Please see the Data::Presenter documentation to learn how to use Data::Presenter::SampleHair.
+This package is a sample subclass of, and inherits from, Data::Presenter.  Please see the Data::Presenter documentation to learn how to use Data::Presenter::Sample::Hair.
 
-As a sample package, Data::Presenter::SampleHair is intended to be used with the following files contained in this distribution:
+As a sample package, Data::Presenter::Sample::Hair is intended to be used with the following files contained in this distribution:
 
 =over 4
 
@@ -150,7 +155,7 @@ v0.61 (4/12/03):  First version uploaded to CPAN.
 
 James E. Keenan (jkeenan@cpan.org).
 
-Creation date:  October 25, 2001.  Last modification date:  October 23, 2004.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
+Creation date:  October 25, 2001.  Last modification date:  December 24, 2005.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
 
 All data presented in this documentation or in the sample files in the archive accompanying this documentation are dummy copy.  The data was entirely fabricated by the author for heuristic purposes.  Any resemblance to any person, living or dead, is coincidental.
 

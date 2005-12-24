@@ -1,3 +1,5 @@
+# fields.hair.data
+
 @fields = qw(
     cno
     lastname

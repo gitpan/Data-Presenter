@@ -1,5 +1,5 @@
-package Data::Presenter::SampleCensus;
-$VERSION = 0.68; # 10/23/2004
+package Data::Presenter::Sample::Census;
+$VERSION = 1.0; # 12-24-2005
 @ISA = qw(Data::Presenter);
 use strict;
 
@@ -19,7 +19,7 @@ sub _init {
 			push @paramvalues, \@{$parameters{$fields[$i]}};
 	}
 	$data{'parameters'} = [@paramvalues];
-	$data{'index'} = [$index];	# NEW!
+	$data{'index'} = $index;
 
 	open(CENSUS, $sourcefile) || die "cannot open $sourcefile for reading: $!";     
 	while (<CENSUS>) {
@@ -44,6 +44,10 @@ sub _init {
 		# 07/02/2001 to 2001-07-02.  Whitespace may need to be stripped off from the end of 
 		# data.  If so, write subroutines to achieve these objectives and call them for 
 		# individual fields as needed.  Then assign the results to @corrected.
+        $lastname =~ s/\s+$//;
+        $firstname =~ s/\s+$//;
+        $cno =~ s/^\s+//;
+        $unit =~ s/^\s+//;
 		@corrected = ($lastname, $firstname, $cno, $unit, $ward, $dateadmission, $datebirth);
 		# DATA MUNGING ENDS HERE
 		$seen{$corrected[$index]}++;	# NEW!
@@ -110,17 +114,17 @@ sub _extract_rows {
 
 =head1 NAME
 
-Data::Presenter::SampleCensus
+Data::Presenter::Sample::Census
 
 =head1 VERSION
 
-This document refers to version 0.68 of Data::Presenter::SampleCensus, released October 23, 2004. 
+This document refers to version 1.0 of Data::Presenter::Sample::Census, released December 24, 2005. 
 
 =head1 DESCRIPTION
 
-This package is a sample subclass of, and inherits from, Data::Presenter.  Please see the Data::Presenter documentation to learn how to use Data::Presenter::SampleCensus.
+This package is a sample subclass of, and inherits from, Data::Presenter.  Please see the Data::Presenter documentation to learn how to use Data::Presenter::Sample::Census.
 
-As a sample package, Data::Presenter::SampleCensus is intended to be used with the following files contained in this distribution:
+As a sample package, Data::Presenter::Sample::Census is intended to be used with the following files contained in this distribution:
 
 =over 4
 
@@ -154,7 +158,7 @@ v0.61 (4/12/03):  First version uploaded to CPAN.
 
 James E. Keenan (jkeenan@cpan.org).
 
-Creation date:  October 25, 2001.  Last modification date:  October 23, 2004.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
+Creation date:  October 25, 2001.  Last modification date:  December 24, 2005.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
 
 All data presented in this documentation or in the sample files in the archive accompanying this documentation are dummy copy.  The data was entirely fabricated by the author for heuristic purposes.  Any resemblance to any person, living or dead, is coincidental.
 

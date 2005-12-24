@@ -1,5 +1,5 @@
-package Data::Presenter::SampleSchedule;
-$VERSION = 0.68; # 10/23/2004
+package Data::Presenter::Sample::Schedule_undef;
+$VERSION = 1.0; # 12-24-2005
 @ISA = qw(Data::Presenter);
 use strict;
 
@@ -15,7 +15,7 @@ sub _init {
             push @paramvalues, \@{$parameters{$fields[$i]}};
     }
     $data{'parameters'} = [@paramvalues];
-    $data{'index'} = [$index];
+    $data{'index'} = $index;
     
     my %events = %$msobject;
     my ($k, $v);
@@ -27,7 +27,7 @@ sub _init {
         my @temp = ($k, @$v);
         my @corrected = ();
         foreach (@temp) {
-            if (/!/) {
+            if (defined $_ && $_ =~ m/!/) {
                 die "The character '!' is reserved for internal use and cannot appear\nin data being processed by Data::Presenter:  $!";
             } else {
                 push @corrected, $_;
@@ -98,7 +98,8 @@ sub _extract_rows {
 }
 
 sub _reprocessor {
-    my ($self, $line_raw, $sdref, $u) = @_;
+#    my ($self, $line_raw, $sdref, $rec) = @_;
+    my ($self, $line_raw, $sdref) = @_;
     my ($line_temp);
 
     # for readability during development
@@ -107,8 +108,8 @@ sub _reprocessor {
     $line_temp = $line_raw;
     
     # Need to apply the reprocessing right-to-left on the formed line 
-    # Hence we need an array where the elements of @$reprocessref are arranged by decreasing
-    # order of the insertion point
+    # Hence we need an array where the elements of @$reprocessref are 
+    # arranged by decreasing order of the insertion point
 
     foreach (sort {$b <=> $a} keys %substr_data) {
         my $line_temp1 = $line_temp;
@@ -116,29 +117,32 @@ sub _reprocessor {
         my $subname = 'reprocess_' . $field;
         my $initial_length = $substr_data{$_}[1];
         my $original = substr ($line_temp1, $_, $initial_length);
-        my $fixed_length = $substr_data{$_}[2];
-        my %this_source = %{$substr_data{$_}[3]};
-        my %all_sources = %{$substr_data{$_}[4]};
+        my $fixed_length   = $substr_data{$_}[2];
+        my %this_source  = %{$substr_data{$_}[3]};
+        my %all_sources  = %{$substr_data{$_}[4]};
         no strict 'refs';
         substr($line_temp, $_, $initial_length) = 
             &$subname($initial_length, $original, 
-                $fixed_length, \%this_source, \%all_sources, $u);
+#                $fixed_length, \%this_source, \%all_sources, $rec);
+                $fixed_length, \%this_source, \%all_sources);
     }
     return $line_temp;
 }
 
 sub reprocess_timeslot {
-    my ($initial_length, $original, $fixed_length, $sourceref, $dataref, $u) = @_;
+    my ($initial_length, $original, $fixed_length, $sourceref, 
+#        $dataref, $rec) = @_;
+        $dataref) = @_;
     my ($keyword, $replacement, $len);
     $original =~ m|(.*)\b\s*$|;
     $keyword = $1 if (defined $1);
     my %sources = %$sourceref;
     my %data = %$dataref;
     if (exists $sources{$keyword}) {
-    my $start_time = ${$sources{$keyword}}[1];
-    if (defined $data{$u}[4]) {
-        $start_time = refine_start_time(\@{$data{$u}}, $start_time);
-    }
+        my $start_time = ${$sources{$keyword}}[1];
+#        if (defined $data{$rec}[4]) {
+#            $start_time = refine_start_time(\@{$data{$rec}}, $start_time);
+#        }
         $replacement = ${$sources{$keyword}}[0] . ', ' . $start_time;
         $replacement = _length_adjuster($replacement, $fixed_length);
     } else {
@@ -155,10 +159,11 @@ sub reprocess_instructor {
     my %sources = %$sourceref;
     if (exists $sources{$keyword}) {
         if (${$sources{$keyword}}[1]) {
-          # last name only
-#            $replacement = ${$sources{$keyword}}[0];
-               # last name, first name
-            $replacement = ${$sources{$keyword}}[0] . ', ' . ${$sources{$keyword}}[1];
+            # last name only would be:
+            # $replacement = ${$sources{$keyword}}[0];
+            # but now we're using:  last name, first name
+            $replacement = 
+                ${$sources{$keyword}}[0] . ', ' . ${$sources{$keyword}}[1];
         } else {
             $replacement = ${$sources{$keyword}}[0];
         }
@@ -233,74 +238,52 @@ sub _length_adjuster {
 }
 
 sub _reprocessor_delimit {
-    my ($self, $tempref, $elref, $u) = @_;
-    # for readability during development
-    # @temp:  the array whose elements will eventually be joined by a delimiter
-    #         and printed to file
-    # %element_data:  the information which each field to be reprocessed will 
-    #         need
-    # $u:     the current groupID
-    my @temp = @{$tempref};
-    my %element_data = %$elref;
-    foreach (keys %element_data) {
-        my $field = $element_data{$_}[0];
-        my $subname = 'reprocess_delimit_' . $field;
-        my %this_source = %{$element_data{$_}[1]};    # dimension being analyzed
-        my %all_sources = %{$element_data{$_}[2]};  # the whole data structure
+    my ($self, $record, $reprocessing_ref, $cols_ref) = @_;
+    my $dataref = \%{$self};
+    my @outputs = @{$record};
+    foreach my $repcol (@{$reprocessing_ref}) {
         no strict 'refs';
-        $temp[$_] = &$subname($field, \%this_source, \%all_sources, $u);
+        my $sub = q{reprocess_delimit_} . $repcol;
+        $outputs[$cols_ref->{$repcol}] = &$sub (
+            repcol      => $repcol,
+            cols        => $cols_ref,
+            output      => \@outputs,
+            data        => $dataref,
+        );
     }
-    return \@temp;
-}
-
-sub reprocess_delimit_instructor {
-    my ($field, $sourceref, $allsourceref, $u) = @_;
-    my ($replacement);
-    my %sources = %$sourceref;
-    my %data = %$allsourceref;
-    my $insID = $data{$u}[6];    # instructor data for the current groupID
-    $replacement = $sources{$insID}[0] . ', ' . $sources{$insID}[1];
-    return $replacement;
+    return \@outputs;
 }
 
 sub reprocess_delimit_timeslot {
-    my ($field, $sourceref, $allsourceref, $u) = @_;
-    my %sources = %$sourceref;
-    my %data = %$allsourceref;
-    my $tsID = $data{$u}[2];    # timeslot data for the current groupID
-    my ($day, $start_time) = @{$sources{$tsID}}[0..1];
-    if (defined $data{$u}[4]) {  # if the group is a non-trans-ward group ...
-        $start_time = refine_start_time(\@{$data{$u}}, $start_time);
-    }
-    my $replacement = $day . ', ' . $start_time;
-    return $replacement;
+    my %args = @_;
+    my $el      = $args{cols}->{$args{repcol}};
+    my $datum   = $args{output}->[$el];
+    my @coldata = @{$args{data}->{options}{sources}{$args{repcol}}{$datum}};
+    return join q{, }, @coldata[0,1];
+}
+
+sub reprocess_delimit_instructor {
+    my %args = @_;
+    my $el      = $args{cols}->{$args{repcol}};
+    my $datum   = $args{output}->[$el];
+    my @coldata = @{$args{data}->{options}{sources}{$args{repcol}}{$datum}};
+    return join q{, }, @coldata[0,1];
+}
+
+sub reprocess_delimit_ward_department {
+    my %args = @_;
+    my $el      = $args{cols}->{$args{repcol}};
+    my $datum   = $args{output}->[$el];
+    $datum ? return ${$args{data}}{options}{sources}{$args{repcol}}{$datum}[0] 
+           : return q{};
 }
 
 sub reprocess_delimit_room {
-    my ($field, $sourceref, $allsourceref, $u) = @_;
-    my %sources = %$sourceref;
-    my %data = %$allsourceref;
-    my $rmID = $data{$u}[1];    # room data for the current groupID
-    my ($room, $mall, $area) = @{$sources{$rmID}}[0..2];
-    my $replacement = "$mall $room";
-    return $replacement;
-}
-
-sub refine_start_time {
-	my ($thisgroupref, $start_time) = @_;
-	my @thisgroup = @{$thisgroupref};
-        if ($thisgroup[4] eq '09') {
-            if ($start_time eq '1:30') {
-                 $start_time = '2:00';
-            } elsif ($start_time eq '2:30') {
-                 $start_time = '2:45';
-            }
-        } elsif ( ($thisgroup[4] eq '10' or $thisgroup[4] eq '11')
-             && ($thisgroup[2] eq '12' or $thisgroup[2] eq '32' or $thisgroup[2] eq '52')
-                ) {
-                      $start_time = '10:45';
-        }
-	return $start_time;
+    my %args = @_;
+    my $el      = $args{cols}->{$args{repcol}};
+    my $datum   = $args{output}->[$el];
+    my @coldata = @{$args{data}->{options}{sources}{$args{repcol}}{$datum}};
+    return 'Mall ' .  @coldata[0,1] .  q{, Room } . $datum;
 }
 
 1;
@@ -309,18 +292,18 @@ sub refine_start_time {
 
 =head1 NAME
 
-Data::Presenter::SampleSchedule
+Data::Presenter::Sample::Schedule
 
 =head1 VERSION
 
-This document refers to version 0.68 of Data::Presenter::SampleSchedule, released October 23, 2004. 
+This document refers to version 1.0 of Data::Presenter::Sample::Schedule, released December 24, 2005. 
 
 =head1 SYNOPSIS
 
-Create a Data::Presenter::SampleSchedule object.  The first argument passed to the constructor for this object is a reference to an anonymous hash which has been created outside of Data::Presenter for heuristic purposes only.  For illustrative purposes, this variable is contained in a separate file which is C<require>d into the script.
+Create a Data::Presenter::Sample::Schedule object.  The first argument passed to the constructor for this object is a reference to an anonymous hash which has been created outside of Data::Presenter for heuristic purposes only.  For illustrative purposes, this variable is contained in a separate file which is C<require>d into the script.
 
     use Data::Presenter;
-    use Data::Presenter::SampleSchedule;
+    use Data::Presenter::Sample::Schedule;
 	our ($ms);
 	my $hashfile = 'reprocessible.txt';
 	require $hashfile;
@@ -340,12 +323,12 @@ Then do the usual preparation for a Data::Presenter::[subclass] object.
     $fieldsfile = 'fields_schedule.data';
     do $fieldsfile;
 
-Finally, create a Data::Presenter::SampleSchedule object, passing the hash reference as the first argument.
+Finally, create a Data::Presenter::Sample::Schedule object, passing the hash reference as the first argument.
 
-    my $dp = Data::Presenter::SampleSchedule->new(
+    my $dp = Data::Presenter::Sample::Schedule->new(
                  $ms, \@fields, \%parameters, $index);
 
-To use sorting, selecting and output methods on a Data::Presenter::SampleSchedule object, please consult the Data::Presenter documentation.
+To use sorting, selecting and output methods on a Data::Presenter::Sample::Schedule object, please consult the Data::Presenter documentation.
 
 =head1 DESCRIPTION
 
@@ -371,37 +354,37 @@ C<&writedelimited_deluxe>
 
 =back
 
-To learn how to use Data::Presenter::SampleSchedule, please first consult the Data::Presenter documentation.
+To learn how to use Data::Presenter::Sample::Schedule, please first consult the Data::Presenter documentation.
 
 =head1 INTERNAL FEATURES
 
-=head2 The Data::Presenter::SampleSchedule Object
+=head2 The Data::Presenter::Sample::Schedule Object
 
-Unlike some other Data::Presenter::[package1] subclasses (I<e.g.,> Data::Presenter::Census), the source of the data processed by Data::Presenter::SampleSchedule is not a database report coming from a legacy database system through a filehandle.  Rather, it is a hash of arrays representing the current state of an object at a particular point in a script (suitably modified to carry Data::Presenter metadata).  The hash of arrays used for illustrative purposes in this distribution was generated by the author from a module, Mall::Schedule, which is not part of the Data::Presenter distribution.  Mall::Schedule schedules therapeutic treatment groups into particular rooms and time slots and with particular instructors.  The time slots and instructors are identified in the underlying database by unique IDs, but it is often preferable to have more human-readable strings appear in output rather than these IDs.  The IDs need to be 'reprocessed' into more readable strings.  This is the task solved by Data::Presenter::SampleSchedule.  Since we are not here concerned with the creation of a Mall::Schedule object, all we need is the anonymous hash blessed into that object and the reprocessing methods.
+Unlike some other Data::Presenter::[package1] subclasses (I<e.g.,> Data::Presenter::Census), the source of the data processed by Data::Presenter::Sample::Schedule is not a database report coming from a legacy database system through a filehandle.  Rather, it is a hash of arrays representing the current state of an object at a particular point in a script (suitably modified to carry Data::Presenter metadata).  The hash of arrays used for illustrative purposes in this distribution was generated by the author from a module, Mall::Schedule, which is not part of the Data::Presenter distribution.  Mall::Schedule schedules therapeutic treatment groups into particular rooms and time slots and with particular instructors.  The time slots and instructors are identified in the underlying database by unique IDs, but it is often preferable to have more human-readable strings appear in output rather than these IDs.  The IDs need to be 'reprocessed' into more readable strings.  This is the task solved by Data::Presenter::Sample::Schedule.  Since we are not here concerned with the creation of a Mall::Schedule object, all we need is the anonymous hash blessed into that object and the reprocessing methods.
 
-=head2 Data::Presenter::SampleSchedule Internal Subroutines
+=head2 Data::Presenter::Sample::Schedule Internal Subroutines
 
-Like all Data::Presenter::[package1] classes, Data::Presenter::SampleSchedule necessarily contains two subroutines:
+Like all Data::Presenter::[package1] classes, Data::Presenter::Sample::Schedule necessarily contains two subroutines:
 
 =over 4
 
 =item *
 
-C<&_init>:  Initializes the Data::Presenter::SampleSchedule object by processing data contained in the Mall::SampleSchedule object and returning a reference to a hash which is then further processed and blessed by the Data::Presenter constructor.
+C<&_init>:  Initializes the Data::Presenter::Sample::Schedule object by processing data contained in the Mall::Sample::Schedule object and returning a reference to a hash which is then further processed and blessed by the Data::Presenter constructor.
 
 =item *
 
-C<&_extract_rows>:  Customizes the operation of C<&Data::Presenter::select_rows> to the data found in the C<Data::Presenter::SampleSchedule> object.
+C<&_extract_rows>:  Customizes the operation of C<&Data::Presenter::select_rows> to the data found in the C<Data::Presenter::Sample::Schedule> object.
 
 =back
 
-Like many Data::Presenter::[package1] classes, Data::Presenter::SampleSchedule offers the possibility of using C<&Data::Presenter::writeformat_with_reprocessing> and C<&Data::Presenter::writeformat_deluxe>.  As such Data::Presenter::SampleSchedule defines the following additional internal subroutines:
+Like many Data::Presenter::[package1] classes, Data::Presenter::Sample::Schedule offers the possibility of using C<&Data::Presenter::writeformat_with_reprocessing> and C<&Data::Presenter::writeformat_deluxe>.  As such Data::Presenter::Sample::Schedule defines the following additional internal subroutines:
 
 =over 4
 
 =item *
 
-C<&_reprocessor>:  Customizes the operation of C<&Data::Presenter::writeformat_with_reprocessing> to the data found in the C<Data::Presenter::SampleSchedule> object.
+C<&_reprocessor>:  Customizes the operation of C<&Data::Presenter::writeformat_with_reprocessing> to the data found in the C<Data::Presenter::Sample::Schedule> object.
 
 =item *
 
@@ -425,13 +408,13 @@ C<&reprocess_ward_department>:  Takes the code number for a ward or department (
 
 =back
 
-In addition, Data::Presenter::SampleSchedule now offers the possibility of using C<&Data::Presenter::writedelimit_with_reprocessing>.  As such Data::Presenter::SampleSchedule defines the following additional internal subroutines:
+In addition, Data::Presenter::Sample::Schedule now offers the possibility of using C<&Data::Presenter::writedelimit_with_reprocessing>.  As such Data::Presenter::Sample::Schedule defines the following additional internal subroutines:
 
 =over 4
 
 =item *
 
-C<&_reprocessor_delimit>: Customizes the operation of C<&Data::Presenter::writedelimit_with_reprocessing> to the data found in the C<Data::Presenter::SampleSchedule> object.
+C<&_reprocessor_delimit>: Customizes the operation of C<&Data::Presenter::writedelimit_with_reprocessing> to the data found in the C<Data::Presenter::Sample::Schedule> object.
 
 =item *
 
@@ -471,7 +454,7 @@ v0.61 (4/12/03):  First version uploaded to CPAN.
 
 James E. Keenan (jkeenan@cpan.org).
 
-Creation date:  October 25, 2001.  Last modification date:  October 23, 2004.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
+Creation date:  October 25, 2001.  Last modification date:  December 24, 2005.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
 
 All data presented in this documentation or in the sample files in the archive accompanying this documentation are dummy copy.  The data was entirely fabricated by the author for heuristic purposes.  Any resemblance to any person, living or dead, is coincidental.
 

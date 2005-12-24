@@ -1,9 +1,9 @@
-# 01.t
-# Revised 12-03-2005 for Data-Presenter-0.69_01
+# 09_null.t
+# Created 12-09-2005
 use strict;
 use warnings;
 use Test::More 
-tests => 154;
+tests => 155;
 # qw(no_plan);
 use_ok('Data::Presenter');
 use_ok('Cwd');
@@ -41,7 +41,7 @@ my $topdir = cwd();
 
     # 1.01:  Create a Data::Presenter::Sample::Census object:
 
-    $sourcefile = "$topdir/source/census.txt";
+    $sourcefile = "$topdir/source/census.null.txt";
     $fieldsfile = "$topdir/config/fields.census.data";
     do $fieldsfile;
     my $dp0 = Data::Presenter::Sample::Census->new(
@@ -139,16 +139,16 @@ my $topdir = cwd();
     @columns_selected = qw( ward lastname firstname datebirth cno );
     $sorted_data = $dp0->sort_by_column(\@columns_selected);
     @predicted = (
-        [ qw| 0103 JONES | ],
-        [ qw| 0104 VASQUEZ | ],
-        [ qw| 0105 VASQUEZ | ],
-        [ qw| 0107 VASQUEZ | ],
-        [ qw| 0110 VAZQUEZ | ],
-        [ qw| 0110 WILSON | ],
-        [ qw| 0111 SMITH | ],
-        [ qw| 0111 VASQUEZ | ],
-        [ qw| 0209 VASQUEZ | ],
-        [ qw| 0211 SMITH | ],
+        [ q{},    q{VASQUEZ}   ],
+        [ q{},    q{VAZQUEZ}   ],
+        [ qw| 0103 JONES     | ],
+        [ qw| 0104 VASQUEZ   | ],
+        [ qw| 0107 VASQUEZ   | ],
+        [ qw| 0110 WILSON    | ],
+        [ qw| 0111 SMITH     | ],
+        [ qw| 0111 VASQUEZ   | ],
+        [ qw| 0209 VASQUEZ   | ],
+        [ qw| 0211 SMITH     | ],
         [ qw| 0217 HERNANDEZ | ],
     );
     test_two_elements($sorted_data, \@predicted);
@@ -164,7 +164,7 @@ my $topdir = cwd();
     ), 'writeformat');
     ok( (tie @lines, 'Tie::File', $outputfile),
         "tied to file created by writeformat()");
-    is( $lines[0], q{0103 JONES          TIMOTHY    1969-06-29 803092},
+    is( $lines[0], q{     VASQUEZ        JORGE      1956-01-13 456787},
         "first line matches");
     is( $lines[-1], q{0217 HERNANDEZ      HECTOR     1963-08-01 456791},
         "last line matches");
@@ -186,7 +186,7 @@ my $topdir = cwd();
         "last line of header matches");
     is( $lines[4], q{------------------------------------------------},
         "hyphen line matches");
-    is( $lines[5], q{0103 JONES          TIMOTHY    1969-06-29 803092},
+    is( $lines[5], q{     VASQUEZ        JORGE      1956-01-13 456787},
         "first line matches");
     is( $lines[-1], q{0217 HERNANDEZ      HECTOR     1963-08-01 456791},
         "last line matches");
@@ -200,7 +200,7 @@ my $topdir = cwd();
     ), 'writedelimited');
     ok( (tie @lines, 'Tie::File', $outputfile),
         "tied to file created by writedelimited()");
-    is( $lines[0], q{0103	JONES	TIMOTHY	1969-06-29	803092},
+    is( $lines[0], q{	VASQUEZ	JORGE	1956-01-13	456787},
         "first line matches");
     is( $lines[-1], q{0217	HERNANDEZ	HECTOR	1963-08-01	456791},
         "last line matches");
@@ -217,7 +217,7 @@ my $topdir = cwd();
         "tied to file created by writedelimited_plus_header()");
     is( $lines[0], q{Ward	Last Name	First Name	Date of Birth	C No.},
         "header line matches");
-    is( $lines[1], q{0103	JONES	TIMOTHY	1969-06-29	803092},
+    is( $lines[1], q{	VASQUEZ	JORGE	1956-01-13	456787},
         "first line matches");
     is( $lines[-1], q{0217	HERNANDEZ	HECTOR	1963-08-01	456791},
         "last line matches");
@@ -242,7 +242,7 @@ my $topdir = cwd();
 
     # 1.06:  Select exactly one column from a Data::Presenter::Sample::Census
     #          object and count frequency of entries in that column:
-    
+
     eval { $dp0->seen_one_column(); };
     like( $@, qr/^Invalid number of arguments to seen_one_column/,
         "seen_one_column correctly failed due to wrong number of arguments");
@@ -253,16 +253,16 @@ my $topdir = cwd();
 
     %seen = %{$dp0->seen_one_column('unit')};
     ok( ($seen{'SAMSON'} == 3), 'seen_one_column:  1 arg');
-    ok( ($seen{'LAVER'}  == 6), 'seen_one_column:  1 arg');
-    ok( ($seen{'TRE'}    == 2), 'seen_one_column:  1 arg');
+    ok( ($seen{'LAVER'}  == 5), 'seen_one_column:  1 arg');
+    ok( ($seen{'TRE'}    == 1), 'seen_one_column:  1 arg');
 
     # 1.07:  Extract selected entries (rows) from 
     #       Data::Presenter::Sample::Census object, 
     #       then call simple output methods on the now smaller object:
 
-    $column = 'ward';
-    $relation = '>=';
-    @choices = ('0200');
+    $column = 'unit';
+    $relation = 'ne';
+    @choices = (qw| SAMSON LAVER |);
     $dp0->select_rows($column, $relation, \@choices);
 
     $capture = IO::Capture::Stdout->new();
@@ -274,22 +274,22 @@ my $topdir = cwd();
     like($caught, qr/3$/, "correct item count printed to screen");
     ok( ($dp0->get_data_count == 3), 'get_data_count');
     %seen = map { $_ => 1 } @{$dp0->get_keys};
-    ok($seen{456789}, 'key recognized');
-    ok($seen{456791}, 'key recognized');
-    ok($seen{698389}, 'key recognized');
-    ok(! $seen{786792}, 'key correctly not recognized');
-    ok(! $seen{803092}, 'key correctly not recognized');
-    ok(! $seen{906786}, 'key correctly not recognized');
+    ok($seen{359962}, 'key recognized');
+    ok($seen{786792}, 'key recognized');
+    ok($seen{906786}, 'key recognized');
+    ok(! $seen{456789}, 'key correctly not recognized');
+    ok(! $seen{456791}, 'key correctly not recognized');
+    ok(! $seen{698389}, 'key correctly not recognized');
 
     %seen = %{$dp0->get_keys_seen};
-    ok($seen{456789}, 'key recognized');
-    ok($seen{456791}, 'key recognized');
-    ok($seen{698389}, 'key recognized');
-    ok(! $seen{786792}, 'key correctly not recognized');
-    ok(! $seen{803092}, 'key correctly not recognized');
-    ok(! $seen{906786}, 'key correctly not recognized');
+    ok($seen{359962}, 'key recognized');
+    ok($seen{786792}, 'key recognized');
+    ok($seen{906786}, 'key recognized');
+    ok(! $seen{456789}, 'key correctly not recognized');
+    ok(! $seen{456791}, 'key correctly not recognized');
+    ok(! $seen{698389}, 'key correctly not recognized');
 
-    $outputfile = "census_ward_200_plus.txt";
+    $outputfile = "census_ward_not_samson_or_laver.txt";
     $return = $dp0->print_to_file($outputfile);
     ok( ($return == 1), 'print_to_file');
 
@@ -300,16 +300,16 @@ my $topdir = cwd();
     @columns_selected = qw( ward lastname firstname datebirth cno );
     $sorted_data = $dp0->sort_by_column(\@columns_selected);
     @predicted = (
-        [ qw| 0209 VASQUEZ | ],
-        [ qw| 0211 SMITH | ],
-        [ qw| 0217 HERNANDEZ | ],
+        [ qw| 0104 VASQUEZ   | ],
+        [ qw| 0111 SMITH     | ],
+        [ qw| 0111 VASQUEZ   | ],
     );
     test_two_elements($sorted_data, \@predicted);
 
     # 1.09:  Call complex output methods on the now smaller  
     #       Data::Presenter::Sample::Census object:
 
-    $outputfile = "format_ward_200_plus_00.txt";
+    $outputfile = "format_ward_no_samson_or_laver.txt";
     ok($dp0->writeformat(
         sorted      => $sorted_data, 
         columns     => \@columns_selected, 
@@ -317,14 +317,14 @@ my $topdir = cwd();
     ), 'writeformat');
     ok( (tie @lines, 'Tie::File', $outputfile),
         "tied to file created by writeformat()");
-    is( $lines[0], q{0209 VASQUEZ        JOAQUIN    1970-03-25 456789},
+    is( $lines[0], q{0104 VASQUEZ        ADALBERTO  1973-08-17 786792},
         "first line matches");
-    is( $lines[-1], q{0217 HERNANDEZ      HECTOR     1963-08-01 456791},
+    is( $lines[-1], q{0111 VASQUEZ        ALBERTO    1953-02-28 906786},
         "last line matches");
     ok( untie @lines, "array untied");
 
-    $outputfile = "format_ward_200_plus_01.txt";
-    $title = 'Agency Census Report:  Wards 200 and Over';
+    $outputfile = "format_ward_no_samson_or_laver_plus_01.txt";
+    $title = 'Agency Census Report:  Units Other than Samson or Laver';
     ok($dp0->writeformat_plus_header(
         sorted      => $sorted_data, 
         columns     => \@columns_selected, 
@@ -333,19 +333,19 @@ my $topdir = cwd();
     ), 'writeformat_plus_header');
     ok( (tie @lines, 'Tie::File', $outputfile),
         "tied to file created by writeformat_plus_header()");
-    is( $lines[0], q{Agency Census Report:  Wards 200 and Over},
+    is( $lines[0], q{Agency Census Report:  Units Other than Samson or Laver},
         "title line matches");
     is( $lines[3], q{Ward Last Name      First Name of Birth   C No. },
         "last line of header matches");
     is( $lines[4], q{------------------------------------------------},
         "hyphen line matches");
-    is( $lines[5], q{0209 VASQUEZ        JOAQUIN    1970-03-25 456789},
+    is( $lines[5], q{0104 VASQUEZ        ADALBERTO  1973-08-17 786792},
         "first line matches");
-    is( $lines[-1], q{0217 HERNANDEZ      HECTOR     1963-08-01 456791},
+    is( $lines[-1], q{0111 VASQUEZ        ALBERTO    1953-02-28 906786},
         "last line matches");
     ok( untie @lines, "array untied");
 
-    $outputfile = "delimit_ward_200_plus_00.txt";
+    $outputfile = "delimit_ward_no_samson_or_laver.txt";
     ok($dp0->writedelimited(
         sorted      => $sorted_data,
         file        => $outputfile,
@@ -353,13 +353,13 @@ my $topdir = cwd();
     ), 'writedelimited');
     ok( (tie @lines, 'Tie::File', $outputfile),
         "tied to file created by writedelimited()");
-    is( $lines[0], q{0209	VASQUEZ	JOAQUIN	1970-03-25	456789},
+    is( $lines[0], q{0104	VASQUEZ	ADALBERTO	1973-08-17	786792},
         "first line matches");
-    is( $lines[-1], q{0217	HERNANDEZ	HECTOR	1963-08-01	456791},
+    is( $lines[-1], q{0111	VASQUEZ	ALBERTO	1953-02-28	906786},
         "last line matches");
     ok( untie @lines, "array untied");
 
-    $outputfile = "delimit_ward_200_plus_01.txt";
+    $outputfile = "delimit_ward_no_samson_or_laver_plus.txt";
     ok($dp0->writedelimited_plus_header(
         sorted      => $sorted_data,
         columns     => \@columns_selected,
@@ -370,9 +370,9 @@ my $topdir = cwd();
         "tied to file created by writedelimited_plus_header()");
     is( $lines[0], q{Ward	Last Name	First Name	Date of Birth	C No.},
         "header line matches");
-    is( $lines[1], q{0209	VASQUEZ	JOAQUIN	1970-03-25	456789},
+    is( $lines[1], q{0104	VASQUEZ	ADALBERTO	1973-08-17	786792},
         "first line matches");
-    is( $lines[-1], q{0217	HERNANDEZ	HECTOR	1963-08-01	456791},
+    is( $lines[-1], q{0111	VASQUEZ	ALBERTO	1953-02-28	906786},
         "last line matches");
     ok( untie @lines, "array untied");
 
@@ -381,26 +381,27 @@ my $topdir = cwd();
         sorted      => $sorted_data,
         columns     => \@columns_selected,
         file        => $outputfile,
-        title       => 'Agency Census Report:  Wards 200 and Over',
+        title       => 'Agency Census Report:  Units Other than Samson or Laver',
     ), "writeHTML");
     ok( (tie @lines, 'Tie::File', $outputfile),
         "tied to file created by writeHTML()");
     like( $lines[0], qr{^<HTML>}, "HTML code matched");
     like( $lines[2], 
-        qr{<TITLE>Agency Census Report:  Wards 200 and Over</TITLE>}, 
+        qr{<TITLE>Agency Census Report:  Units Other than Samson or Laver</TITLE>}, 
         "TITLE code matched");
-    like( $lines[-4], qr{0217 HERNANDEZ      HECTOR     1963-08-01 456791<BK>}, 
+    like( $lines[-4], qr{0111 VASQUEZ        ALBERTO    1953-02-28 906786<BK>}, 
         "last line of copy matched");
     like( $lines[-1], qr{^</HTML>}, "/HTML code matched");
     ok( untie @lines, "array untied");
 
-    # 1.10:    Select exactly one column from the now smaller 
+    # 1.10:  Select exactly one column from the now smaller 
     #          Data::Presenter::Sample::Census object and 
     #          count frequency of entries in that column:
     %seen = %{$dp0->seen_one_column('unit')};
-    ok( ($seen{'SAMSON'} == 3), 'seen_one_column:  1 arg');
+    ok( ($seen{'TRE'} == 1), 'seen_one_column:  1 arg');
+    ok( ($seen{''} == 2), 'seen_one_column:  1 arg');
+    ok( (! exists $seen{'SAMSON'}), 'seen_one_column:  1 arg');
     ok( (! exists $seen{'LAVER'}), 'seen_one_column:  1 arg');
-    ok( (! exists $seen{'TRE'}), 'seen_one_column:  1 arg');
 
     ok(chdir $topdir, 'changed back to original directory after testing');
 }
