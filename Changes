@@ -1,5 +1,10 @@
 Revision history for Perl extension Data::Presenter
 
+1.01    Wed Dec 282005
+
+    - Deleted erroneous call to 'use Test::DataPresenterSpecial' from
+Data::Presenter::Combo::Union.
+
 1.0     Sat Dec 24 2005
 
     - Version number incremented to 1.0 to alert users to major change of

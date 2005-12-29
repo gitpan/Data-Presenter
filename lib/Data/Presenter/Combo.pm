@@ -1,5 +1,5 @@
 package Data::Presenter::Combo;
-$VERSION = 1.0; # 12-24-2005
+$VERSION = 1.01; # 12-28-2005
 @ISA = qw(Data::Presenter);
 use strict;
 use warnings;
@@ -241,7 +241,7 @@ Data::Presenter::Combo
 
 =head1 VERSION
 
-This document refers to version 1.0 of Data::Presenter::Combo, released December 24, 2005. 
+This document refers to version 1.01 of Data::Presenter::Combo, released December 28, 2005. 
 
 =head1 DESCRIPTION
 
@@ -251,7 +251,7 @@ This package is a subclass of, and inherits from, Data::Presenter.  Please see t
 
 James E. Keenan (jkeenan@cpan.org).
 
-Creation date:  October 25, 2001.  Last modification date:  December 24, 2005.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
+Creation date:  October 25, 2001.  Last modification date:  December 28, 2005.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
 
 All data presented in this documentation or in the sample files in the archive accompanying this documentation are dummy copy.  The data was entirely fabricated by the author for heuristic purposes.  Any resemblance to any person, living or dead, is coincidental.
 

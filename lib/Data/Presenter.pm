@@ -1,5 +1,5 @@
 package Data::Presenter;
-$VERSION = 1.0;    # 12-24-2005
+$VERSION = 1.01;    # 12-28-2005
 use strict;
 use warnings;
 use List::Compare::Functional qw( is_LsubsetR );
@@ -1020,11 +1020,11 @@ Data::Presenter - Reformat database reports
 
 =head1 VERSION
 
-This document refers to version 1.0 of Data::Presenter, which consists of
+This document refers to version 1.01 of Data::Presenter, which consists of
 Data::Presenter.pm and various packages subclassed thereunder, most notably
 Data::Presenter::Combo.pm and its subclasses
 Data::Presenter::Combo::Intersect.pm and Data::Presenter::Combo::Union.pm.
-This version was released December 24, 2005.
+This version was released December 28, 2005.
 
 =head1 SYNOPSIS
 
@@ -2888,7 +2888,7 @@ fly'' (L<http://perlmonks.org/?node_id=512460>).
 James E. Keenan (jkeenan@cpan.org).
 
 Creation date:  October 25, 2001.
-Last modification date:  December 24, 2005.
+Last modification date:  December 28, 2005.
 Copyright (c) 2001-5 James E. Keenan.  United States.
 All rights reserved.
 
