@@ -1,6 +1,6 @@
 package Test::DataPresenterSpecial;
 # Contains test subroutines for distribution with Data::Presenter
-# As of:  December 28, 2005
+# As of:  December 30, 2005
 require Exporter;
 our @ISA         = qw(Exporter);
 our @EXPORT_OK   = qw( test_two_elements nicedump selection_tests ); 

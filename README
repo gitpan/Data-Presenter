@@ -1,7 +1,7 @@
 Data::Presenter - Reformat database reports
 
-This document refers to version 1.01 of Data::Presenter.  This version was
-released December 28, 2005.  If you used versions of Data::Presenter prior to
+This document refers to version 1.02 of Data::Presenter.  This version was
+released December 30, 2005.  If you used versions of Data::Presenter prior to
 version 1.00, please read the "Notice of Change of Interface" in the
 documentation, as interfaces to several methods have changed and changes need
 to be made in the Data::Presenter subclasses from which new() is called.
@@ -9,9 +9,9 @@ to be made in the Data::Presenter subclasses from which new() is called.
 To install this module on your system, place the tarball archive file in a 
 temporary directory and call the following:
 
-% gunzip Data-Presenter-1.01.tar.gz
-% tar xf Data-Presenter-1.01.tar
-% cd Data-Presenter-1.01
+% gunzip Data-Presenter-1.02.tar.gz
+% tar xf Data-Presenter-1.02.tar
+% cd Data-Presenter-1.02
 % perl Makefile.PL
 % make
 % make test
@@ -64,7 +64,7 @@ delete these sample files.
 
 Author:  James E. Keenan (jkeenan@cpan.org).
 Creation date:  October 25, 2001.  
-Last modification date:  December 28, 2005.  
+Last modification date:  December 30, 2005.  
 Copyright (c) 2001-2005 James E. Keenan.  United States.  All rights 
 reserved.  This is free software and may be distributed under the 
 same terms as Perl itself.

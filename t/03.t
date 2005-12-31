@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More 
-tests => 204;
+tests => 209;
 # qw(no_plan);
 use_ok('Data::Presenter');
 use_ok('Data::Presenter::Combo');
@@ -338,11 +338,24 @@ my $topdir = cwd();
     like( $@, qr/^Invalid number of arguments to seen_one_column/,
         "seen_one_column correctly failed due to wrong number of arguments");
 
+    eval { $dpCI->seen_one_column( qw| tomcat | ); };
+    like( $@, qr/^Invalid column selection\(s\):  tomcat/,
+        "seen_one_column correctly failed due to invalid argument");
+
     %seen = %{$dpCI->seen_one_column('unit')};
     ok( ($seen{'SAMSON'} == 1), 'seen_one_column:  1 arg');
     ok( ($seen{'LAVER'}  == 2), 'seen_one_column:  1 arg');
     ok( (! exists $seen{'TRE'}), 'seen_one_column:  1 arg');
     
+    # 4.06.1: Select columns corresponding to fields which appeared only in
+    #       objects other than the first passed to the constructor.
+    
+    %seen = %{$dpCI->seen_one_column('haircolor')};
+    ok( ($seen{'BLACK'} == 2), 'seen_one_column:  1 arg');
+    ok( ($seen{'RED'} == 1), 'seen_one_column:  1 arg');
+    ok( (! exists $seen{'SILVER'}), 'seen_one_column:  1 arg');
+    ok( (! exists $seen{'GRAY'}), 'seen_one_column:  1 arg');
+
     # 4.07:  Extract selected entries (rows) from 
     #       Data::Presenter::Combo::Intersect object, 
     #       then call simple output methods on the now smaller object:
@@ -426,8 +439,6 @@ my $topdir = cwd();
     
     $outputfile = "format_combo_ward_200_plus_21.txt";
     $title = 'Agency Census Report:  Wards 200 and Over';
-#    	$sorted_data, \@columns_selected, $outputfile, $title);
-#    ok( ($return == 1), 'writeformat_plus_header');
     ok($dpCI->writeformat_plus_header(
         sorted      => $sorted_data, 
         columns     => \@columns_selected, 

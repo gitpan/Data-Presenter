@@ -1,9 +1,10 @@
 package Data::Presenter;
-$VERSION = 1.01;    # 12-28-2005
+$VERSION = 1.02;    # 12-30-2005
 use strict;
 use warnings;
 use List::Compare::Functional qw( is_LsubsetR );
 use Carp;
+use Data::Dumper;
 
 ############################## Package Variables ##############################
 
@@ -228,9 +229,7 @@ sub sort_by_column {
         _verify_presence_of_index(\%data, $columns_selected_ref);
     my @records;
     foreach my $k (keys %data) {
-        unless ($reserved{$k}) {
-            push @records, $data{$k};
-        }
+        push (@records, $data{$k}) unless ($reserved{$k});
     }
     my $sortref = _sort_maker(
         map { _make_single_comparator( $_ ) }
@@ -307,12 +306,13 @@ sub seen_one_column {
     my %data = %$self;
     croak "Invalid number of arguments to seen_one_column():  $!"
         unless @_ == 1;
-    my $argsref = [ shift ];
-    _validate_args($argsref, \%fp);
+    my $columnref = [ shift ];
+    _validate_args($columnref, \%fp);
     my (%seen);
     foreach (keys %data) {
-        $seen{ $data{$_}[ $fieldlabels{ ${$argsref}[0] } ] }++
-            unless ($reserved{$_});
+        unless ($reserved{$_}) {
+            $seen{ $data{$_}[ $fieldlabels{ ${$columnref}[0] } ] }++;
+        }
     }
     return \%seen;
 }
@@ -320,7 +320,7 @@ sub seen_one_column {
 sub _validate_args {
     my ($columns_selected_ref, $fpref) = @_;
     my @columns_selected = @{$columns_selected_ref};
-    my %seen = ();
+    my (%seen, %unseen, @unseen);
     foreach my $col (@columns_selected) {
         foreach my $field (keys %$fpref) {
             if ($col eq $field) {
@@ -328,13 +328,11 @@ sub _validate_args {
                 last;
             }
         }
+       $unseen{$col}++ unless $seen{$col};
     }
-    foreach my $col (@columns_selected) {
-        carp "Field '${col}' is not available as an argument to be passed to ", 'sort_by_column()', "\n"
-            unless (exists $seen{$col});
-    }
-    croak "Invalid argument(s) to sort_by_column():  $!"
-        unless (scalar(@columns_selected) == scalar(keys %seen));
+    @unseen = sort { lc($a) cmp lc($b) } (keys %unseen);
+    croak "Invalid column selection(s):  @{unseen}:  $!"
+        if (@unseen);
 }
 
 ################################################################################
@@ -439,11 +437,7 @@ sub _print_engine {
     local $_;
     foreach my $i (sort keys %data) {
         unless ($reserved{$i}) {
-            foreach (@{$data{$i}}) {
-#                (defined $_) ? print "$_;"
-#                             : print q{;};
-                print "$_;";
-            }
+            print "$_;" foreach (@{$data{$i}});
             print "\n";
         }
     }
@@ -489,11 +483,7 @@ sub full_report {
             print $OUT "$i\n";
             for (my $j=0; $j <= $#fields; $j++) {
                 print $OUT "    $fields[$j]", ' ' x (24 - length($fields[$j]));
-#                if (defined $data{$i}[$j]) {
-                    print $OUT "$data{$i}[$j]\n";
-#                } else {
-#                    print $OUT "\n";
-#                }
+                print $OUT "$data{$i}[$j]\n";
             }
             print $OUT "\n";
         }
@@ -925,7 +915,6 @@ sub _format_picture_line {
     my $g = 0;      # counter
     foreach my $h (@$columns_selected_ref) {
         my $picture = q{};
-#        if ($fp{$h}[2] eq 'n' || $fp{$h}[2] eq 'N') {
         if ($fp{$h}[2] =~ /^n$/i) {
             $picture = '@' . '>' x ($fp{$h}[0] - 1);
         } else {
@@ -982,9 +971,7 @@ END_OF_HTML1
             my @values = @{$row};
             my @paddedvalues = ();
             for (my $j = 0; $j < scalar(@{$args{columns}}); $j++) {
-#                $values[$j] = q{} if (! defined $values[$j]);
                 my $newvalue = q{};
-#                if ($fp{${$args{columns}}[$j]}[2] eq 'n' || $fp{${$args{columns}}[$j]}[2] eq 'N') {
                 if ($fp{${$args{columns}}[$j]}[2] =~ /^n$/i) {
                     $newvalue =
                         (' ' x ($max{$j} - length($values[$j]))) .
@@ -1020,11 +1007,11 @@ Data::Presenter - Reformat database reports
 
 =head1 VERSION
 
-This document refers to version 1.01 of Data::Presenter, which consists of
+This document refers to version 1.02 of Data::Presenter, which consists of
 Data::Presenter.pm and various packages subclassed thereunder, most notably
 Data::Presenter::Combo.pm and its subclasses
 Data::Presenter::Combo::Intersect.pm and Data::Presenter::Combo::Union.pm.
-This version was released December 28, 2005.
+This version was released December 30, 2005.
 
 =head1 SYNOPSIS
 
@@ -1059,7 +1046,7 @@ This version was released December 28, 2005.
 
     $sorted_data = $dp1->sort_by_column(\@columns_selected);
 
-    $seen_hash_ref = seen_one_column($column);
+    $seen_hash_ref = $dp1->seen_one_column($column);
 
     $dp1->writeformat(
         sorted      => $sorted_data,
@@ -1482,9 +1469,9 @@ Data::Presenter installs in the same way as other Perl extensions available
 from CPAN:  either automatically via the CPAN shell or manually with these
 commands:
 
-    % gunzip Data-Presenter-1.01.tar.gz
-    % tar xf Data-Presenter-1.01.tar
-    % cd Data-Presenter-1.01
+    % gunzip Data-Presenter-1.02.tar.gz
+    % tar xf Data-Presenter-1.02.tar
+    % cd Data-Presenter-1.02
     % perl Makefile.PL
     % make
     % make test
@@ -2888,7 +2875,7 @@ fly'' (L<http://perlmonks.org/?node_id=512460>).
 James E. Keenan (jkeenan@cpan.org).
 
 Creation date:  October 25, 2001.
-Last modification date:  December 28, 2005.
+Last modification date:  December 30, 2005.
 Copyright (c) 2001-5 James E. Keenan.  United States.
 All rights reserved.
 

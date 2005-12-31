@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More 
-tests => 198;
+tests => 205;
 # qw(no_plan);
 use_ok('Data::Presenter');
 use_ok('Data::Presenter::Combo');
@@ -199,10 +199,10 @@ my $topdir = cwd();
     ok( (tie @lines, 'Tie::File', $outputfile),
         "tied to file created by writeformat()");
     is( $lines[0], 
-        q{     ADAMS          GEORGIE               210297 2089297   },
+        q{     ADAMS          GEORGIE               210297 990997849    },
         "first line matches");
     is( $lines[-1], 
-        q{0217 HERNANDEZ      HECTOR     1963-08-01 456791         11},
+        q{0217 HERNANDEZ      HECTOR     1963-08-01 456791              BROWN},
         "last line matches");
     is( @lines, 19, "got expected number of lines after writeformat()");
     ok( untie @lines, "array untied");
@@ -220,16 +220,16 @@ my $topdir = cwd();
     is( $lines[0], q{Agency Census Report},
         "title line matches");
     is( $lines[3], 
-        q{Ward Last Name      First Name of Birth   C No.  ID      Nu},
+        q{Ward Last Name      First Name of Birth   C No.  Medicare No. Haircolor},
         "last line of header matches");
     is( $lines[4], 
-        q{-----------------------------------------------------------},
+        q{-----------------------------------------------------------------------},
         "hyphen line matches");
     is( $lines[5], 
-        q{     ADAMS          GEORGIE               210297 2089297   },
+        q{     ADAMS          GEORGIE               210297 990997849    },
         "first line matches");
     is( $lines[-1], 
-        q{0217 HERNANDEZ      HECTOR     1963-08-01 456791         11},
+        q{0217 HERNANDEZ      HECTOR     1963-08-01 456791              BROWN},
         "last line matches");
     is( @lines, 24, 
         "got expected number of lines after writeformat_plus_header()");
@@ -243,9 +243,9 @@ my $topdir = cwd();
     ), 'writedelimited');
     ok( (tie @lines, 'Tie::File', $outputfile),
         "tied to file created by writedelimited()");
-    is( $lines[0], q{	ADAMS	GEORGIE		210297	2089297	},
+    is( $lines[0], q{	ADAMS	GEORGIE		210297	990997849	},
         "first line matches");
-    is( $lines[-1], q{0217	HERNANDEZ	HECTOR	1963-08-01	456791		11},
+    is( $lines[-1], q{0217	HERNANDEZ	HECTOR	1963-08-01	456791		BROWN},
         "last line matches");
     is( @lines, 19, "got expected number of lines after writedelimited()");
     ok( untie @lines, "array untied");
@@ -260,11 +260,11 @@ my $topdir = cwd();
     ok( (tie @lines, 'Tie::File', $outputfile),
         "tied to file created by writedelimited_plus_header()");
     is( $lines[0], 
-        q{Ward	Last Name	First Name	Date of Birth	C No.	State ID	Number},
+        q{Ward	Last Name	First Name	Date of Birth	C No.	Medicare No.	Haircolor},
         "header line matches");
-    is( $lines[1], q{	ADAMS	GEORGIE		210297	2089297	},
+    is( $lines[1], q{	ADAMS	GEORGIE		210297	990997849	},
         "first line matches");
-    is( $lines[-1], q{0217	HERNANDEZ	HECTOR	1963-08-01	456791		11},
+    is( $lines[-1], q{0217	HERNANDEZ	HECTOR	1963-08-01	456791		BROWN},
         "last line matches");
     is( @lines, 20, 
         "got expected number of lines after writedelimited_plus_header()");
@@ -283,7 +283,7 @@ my $topdir = cwd();
     like( $lines[2], 
         qr{<TITLE>Agency Census Report</TITLE>}, 
         "TITLE code matched");
-    like( $lines[-4], qr{0217 HERNANDEZ      HECTOR     1963-08-01 456791         11<BK>}, 
+    like( $lines[-4], qr{0217 HERNANDEZ      HECTOR     1963-08-01 456791              BROWN}, 
         "last line of copy matched");
     like( $lines[-1], qr{^</HTML>}, "/HTML code matched");
     ok( untie @lines, "array untied");
@@ -299,10 +299,22 @@ my $topdir = cwd();
     like( $@, qr/^Invalid number of arguments to seen_one_column/,
         "seen_one_column correctly failed due to wrong number of arguments");
 
+    eval { $dpCU->seen_one_column( qw| tomcat | ); };
+    like( $@, qr/^Invalid column selection\(s\):  tomcat/,
+        "seen_one_column correctly failed due to invalid argument");
+
     %seen = %{$dpCU->seen_one_column('unit')};
     ok( ($seen{'SAMSON'} == 3), 'seen_one_column:  1 arg');
     ok( ($seen{'LAVER'}  == 6), 'seen_one_column:  1 arg');
     ok( ($seen{'TRE'}    == 2), 'seen_one_column:  1 arg');
+    
+    %seen = %{$dpCU->seen_one_column('haircolor')};
+    ok( ($seen{'BROWN'}     == 1), 'seen_one_column:  1 arg');
+    ok( ($seen{'SILVER'}    == 2), 'seen_one_column:  1 arg');
+    ok( ($seen{'BLACK'}     == 3), 'seen_one_column:  1 arg');
+    ok( ($seen{'BLOND'}     == 1), 'seen_one_column:  1 arg');
+    ok( ($seen{'RED'}       == 1), 'seen_one_column:  1 arg');
+    ok( ($seen{'GRAY'}      == 1), 'seen_one_column:  1 arg');
     
     # 4.07:  Extract selected entries (rows) from 
     #       Data::Presenter::Combo::Union object, 
@@ -388,10 +400,10 @@ my $topdir = cwd();
     ok( (tie @lines, 'Tie::File', $outputfile),
         "tied to file created by writeformat()");
     is( $lines[0], 
-        q{     MARESH         TIMOTHY               392877 2089200 TS84368G},
+        q{     MARESH         TIMOTHY               392877 990989720    TS84368G},
         "first line matches");
     is( $lines[-1], 
-        q{0211 SMITH          BETTY SUE  1949-08-12 698389         },
+        q{0211 SMITH          BETTY SUE  1949-08-12 698389              },
         "last line matches");
     is( @lines, 12, "got expected number of lines after writeformat()");
     ok( untie @lines, "array untied");
@@ -409,16 +421,16 @@ my $topdir = cwd();
     is( $lines[0], q{Agency Census Report:  Wards 200 and Over},
         "title line matches");
     is( $lines[3], 
-        q{Ward Last Name      First Name of Birth   C No.  ID      No.     },
+        q{Ward Last Name      First Name of Birth   C No.  Medicare No. No.     },
         "last line of header matches");
     is( $lines[4], 
-        q{-----------------------------------------------------------------},
+        q{----------------------------------------------------------------------},
         "hyphen line matches");
     is( $lines[5], 
-        q{     MARESH         TIMOTHY               392877 2089200 TS84368G},
+        q{     MARESH         TIMOTHY               392877 990989720    TS84368G},
         "first line matches");
     is( $lines[-1], 
-        q{0211 SMITH          BETTY SUE  1949-08-12 698389         },
+        q{0211 SMITH          BETTY SUE  1949-08-12 698389              },
         "last line matches");
     is( @lines, 17, 
         "got expected number of lines after writeformat_plus_header()");
@@ -432,7 +444,7 @@ my $topdir = cwd();
     ), 'writedelimited');
     ok( (tie @lines, 'Tie::File', $outputfile),
         "tied to file created by writedelimited()");
-    is( $lines[0], q{	MARESH	TIMOTHY		392877	2089200	TS84368G},
+    is( $lines[0], q{	MARESH	TIMOTHY		392877	990989720	TS84368G},
         "first line matches");
     is( $lines[-1], q{0211	SMITH	BETTY SUE	1949-08-12	698389		},
         "last line matches");
@@ -449,9 +461,9 @@ my $topdir = cwd();
     ok( (tie @lines, 'Tie::File', $outputfile),
         "tied to file created by writedelimited_plus_header()");
     is( $lines[0], 
-        q{Ward	Last Name	First Name	Date of Birth	C No.	State ID	Medicaid No.},
+        q{Ward	Last Name	First Name	Date of Birth	C No.	Medicare No.	Medicaid No.},
         "header line matches");
-    is( $lines[1], q{	MARESH	TIMOTHY		392877	2089200	TS84368G},
+    is( $lines[1], q{	MARESH	TIMOTHY		392877	990989720	TS84368G},
         "first line matches");
     is( $lines[-1], q{0211	SMITH	BETTY SUE	1949-08-12	698389		},
         "last line matches");
@@ -472,7 +484,7 @@ my $topdir = cwd();
     like( $lines[2], 
         qr{<TITLE>Agency Census Report:  Wards 200 and Over</TITLE>}, 
         "TITLE code matched");
-    like( $lines[-4], qr{0211 SMITH          BETTY SUE  1949-08-12 698389                 <BK>}, 
+    like( $lines[-4], qr{0211 SMITH          BETTY SUE  1949-08-12 698389                      <BK>}, 
         "last line of copy matched");
     like( $lines[-1], qr{^</HTML>}, "/HTML code matched");
     ok( untie @lines, "array untied");

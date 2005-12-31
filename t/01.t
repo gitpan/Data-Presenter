@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More 
-tests => 154;
+tests => 155;
 # qw(no_plan);
 use_ok('Data::Presenter');
 use_ok('Cwd');
@@ -250,6 +250,10 @@ my $topdir = cwd();
     eval { $dp0->seen_one_column('unit', 'ward'); };
     like( $@, qr/^Invalid number of arguments to seen_one_column/,
         "seen_one_column correctly failed due to wrong number of arguments");
+
+    eval { $dp0->seen_one_column( qw| tomcat | ); };
+    like( $@, qr/^Invalid column selection\(s\):  tomcat/,
+        "seen_one_column correctly failed due to invalid argument");
 
     %seen = %{$dp0->seen_one_column('unit')};
     ok( ($seen{'SAMSON'} == 3), 'seen_one_column:  1 arg');

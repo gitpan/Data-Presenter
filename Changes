@@ -1,6 +1,28 @@
 Revision history for Perl extension Data::Presenter
 
-1.01    Wed Dec 282005
+1.02    Thu Dec 29 2005
+
+    - Corrected documentation error in SYNOPSIS:  lack of calling object for
+seen_one_column().
+
+    - _validate_args():  Simplified error message:  What was formerly a carp
+followed by a croak is now just a croak.  Also, deleted (for now, at
+least) reference to the calling method, as this internal subroutine is called
+by a variety of methods and subroutines.
+
+    - Corrected bug in Data::Presenter::Combo::Union::_process_secneeded().
+Previously, this auxiliary subroutine processed the elements of %{$secneededref}
+without sorting them.  This ultimately meant that the data in the non-first
+objects passed as arguments to Combo::Union->new() were being assigned into
+records within the Combo::Union object in random order.  Since the keys of
+that hash are numerical, sorting the keys in numerical order fixes the
+problem.  sort_by_column() now DWIMs for Combo::Union objects.  This bug was
+not picked up because all the writeformat-type tests in t/04.t were
+essentially misspecified.  They also have been corrected.
+
+    - Eliminated commented-out code in Combo::Intersect and Combo::Union.
+
+1.01    Wed Dec 28 2005
 
     - Deleted erroneous call to 'use Test::DataPresenterSpecial' from
 Data::Presenter::Combo::Union.

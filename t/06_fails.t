@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More 
-tests =>  56;
+tests =>  55;
 # qw(no_plan);
 use_ok('Data::Presenter');
 use_ok('Data::Presenter::Combo');
@@ -176,15 +176,8 @@ my $topdir = cwd();
         IQ
         cno
     | );
-    $capture = IO::Capture::Stderr->new();
-    $capture->start();
     eval { $sorted_data = $dp->sort_by_column(\@columns_selected); };
-    $capture->stop();
-    for my $m ($capture->read()) {
-        $matchcount++ if $m =~ m{^Field '(haircolor|IQ)'};
-    }
-    is( $matchcount, 2, "two bad column names correctly detected");
-    like( $@, qr/Invalid argument\(s\)/, 
+    like( $@, qr/Invalid column selection\(s\):  haircolor IQ/, 
         "sort_by_column() correctly failed due to field unavailable in config file");
 
 # Test for reverse numerical and ascii-betical sorts

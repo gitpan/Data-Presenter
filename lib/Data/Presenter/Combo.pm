@@ -1,5 +1,5 @@
 package Data::Presenter::Combo;
-$VERSION = 1.01; # 12-28-2005
+$VERSION = 1.02; # 12-30-2005
 @ISA = qw(Data::Presenter);
 use strict;
 use warnings;
@@ -241,7 +241,7 @@ Data::Presenter::Combo
 
 =head1 VERSION
 
-This document refers to version 1.01 of Data::Presenter::Combo, released December 28, 2005. 
+This document refers to version 1.02 of Data::Presenter::Combo, released December 30, 2005. 
 
 =head1 DESCRIPTION
 
@@ -251,28 +251,16 @@ This package is a subclass of, and inherits from, Data::Presenter.  Please see t
 
 James E. Keenan (jkeenan@cpan.org).
 
-Creation date:  October 25, 2001.  Last modification date:  December 28, 2005.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
+Creation date:  October 28, 2001.  Last modification date:  December 30, 2005.
+Copyright (c) 2001-5 James E. Keenan.  United States.  All rights reserved.
 
-All data presented in this documentation or in the sample files in the archive accompanying this documentation are dummy copy.  The data was entirely fabricated by the author for heuristic purposes.  Any resemblance to any person, living or dead, is coincidental.
+All data presented in this documentation or in the sample files in the 
+archive accompanying this documentation are dummy copy.  The data was 
+entirely fabricated by the author for heuristic purposes.  Any resemblance 
+to any person, living or dead, is coincidental.
 
-This is free software which you may distribute under the same terms as Perl itself.
+This is free software which you may distribute under the same terms as 
+Perl itself.
 
 =cut 
-
-__END__
-=pod iterative_building_of_fp_and_fieldlabels
-
-# Note 12/4/2005:  I can build these two hashes up here, but I don't know what
-# to do with them yet.  They cannot currently be passed to
-# $self->_merge_engine(), and the Data::Presenter constructor is going to 
-# rebuild them after $self->_init() has run.  
-
-# But they may be useful in solving the
-# problem of getting the right null value in Intersect or Union.
-# Suppose the fully merged object's hash is $data and a given record is $key.
-#     $data{$key} = [ $alpha, $beta, ..., $omega ];
-# The sort type for the ith element index in that array is:
-#       $sort_type = $newbasefp{$newbasefields[$i]}[2];
-
-=cut
 
