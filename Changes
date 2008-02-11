@@ -1,4 +1,8 @@
+#$Id: Changes 1217 2008-02-10 00:06:02Z jimk $
 Revision history for Perl extension Data::Presenter
+
+1.03 Sat Feb  9 19:57:22 AST 2008
+    -Deleted some commented out code.  Added SVN Id tags.
 
 1.02    Thu Dec 29 2005
 

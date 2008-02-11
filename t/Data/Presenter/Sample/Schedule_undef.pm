@@ -1,5 +1,6 @@
 package Data::Presenter::Sample::Schedule_undef;
-$VERSION = 1.02; # 12-30-2005
+#$Id: Schedule_undef.pm 1218 2008-02-10 00:11:59Z jimk $
+$VERSION = 1.03; # 02-10-2008
 @ISA = qw(Data::Presenter);
 use strict;
 
@@ -98,7 +99,6 @@ sub _extract_rows {
 }
 
 sub _reprocessor {
-#    my ($self, $line_raw, $sdref, $rec) = @_;
     my ($self, $line_raw, $sdref) = @_;
     my ($line_temp);
 
@@ -123,7 +123,6 @@ sub _reprocessor {
         no strict 'refs';
         substr($line_temp, $_, $initial_length) = 
             &$subname($initial_length, $original, 
-#                $fixed_length, \%this_source, \%all_sources, $rec);
                 $fixed_length, \%this_source, \%all_sources);
     }
     return $line_temp;
@@ -131,7 +130,6 @@ sub _reprocessor {
 
 sub reprocess_timeslot {
     my ($initial_length, $original, $fixed_length, $sourceref, 
-#        $dataref, $rec) = @_;
         $dataref) = @_;
     my ($keyword, $replacement, $len);
     $original =~ m|(.*)\b\s*$|;
@@ -140,9 +138,6 @@ sub reprocess_timeslot {
     my %data = %$dataref;
     if (exists $sources{$keyword}) {
         my $start_time = ${$sources{$keyword}}[1];
-#        if (defined $data{$rec}[4]) {
-#            $start_time = refine_start_time(\@{$data{$rec}}, $start_time);
-#        }
         $replacement = ${$sources{$keyword}}[0] . ', ' . $start_time;
         $replacement = _length_adjuster($replacement, $fixed_length);
     } else {
@@ -296,7 +291,7 @@ Data::Presenter::Sample::Schedule
 
 =head1 VERSION
 
-This document refers to version 1.02 of Data::Presenter::Sample::Schedule, released December 30, 2005. 
+This document refers to version 1.03 of Data::Presenter::Sample::Schedule, released February 10, 2008. 
 
 =head1 SYNOPSIS
 
@@ -454,7 +449,7 @@ v0.61 (4/12/03):  First version uploaded to CPAN.
 
 James E. Keenan (jkeenan@cpan.org).
 
-Creation date:  October 25, 2001.  Last modification date:  December 30, 2005.  Copyright (c) 2001-4 James E. Keenan.  United States.  All rights reserved.
+Creation date:  October 25, 2001.  Last modification date:  February 10, 2008.  Copyright (c) 2001-08 James E. Keenan.  United States.  All rights reserved.
 
 All data presented in this documentation or in the sample files in the archive accompanying this documentation are dummy copy.  The data was entirely fabricated by the author for heuristic purposes.  Any resemblance to any person, living or dead, is coincidental.
 

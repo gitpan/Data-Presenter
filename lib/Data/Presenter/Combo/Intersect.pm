@@ -1,5 +1,6 @@
 package Data::Presenter::Combo::Intersect;
-$VERSION = 1.02; # 12-30-2005
+#$Id: Intersect.pm 1218 2008-02-10 00:11:59Z jimk $
+$VERSION = 1.03; # 02-10-2008
 @ISA = qw(Data::Presenter::Combo);
 use strict;
 use warnings;
@@ -68,7 +69,7 @@ Data::Presenter::Combo::Intersect
 
 =head1 VERSION
 
-This document refers to version 1.02 of Data::Presenter::Combo::Intersect, released December 30, 2005. 
+This document refers to version 1.03 of Data::Presenter::Combo::Intersect, released February 10, 2008. 
 
 =head1 DESCRIPTION
 
@@ -78,7 +79,7 @@ This package is a subclass of, and inherits from, Data::Presenter::Combo.  Pleas
 
 James E. Keenan (jkeenan@cpan.org).
 
-Creation date:  October 28, 2001.  Last modification date:  December 30, 2005.
+Creation date:  October 28, 2001.  Last modification date:  February 10, 2008.
 Copyright (c) 2001-5 James E. Keenan.  United States.  All rights reserved.
 
 All data presented in this documentation or in the sample files in the 

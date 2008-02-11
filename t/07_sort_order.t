@@ -1,6 +1,5 @@
 # 07_sort_order.t
-# Created 11-24-2005 for Data-Presenter-0.69
-# Revised 12-03-2005 for Data-Presenter-0.69_01
+#$Id: 07_sort_order.t 1217 2008-02-10 00:06:02Z jimk $
 use strict;
 use warnings;
 use Test::More 

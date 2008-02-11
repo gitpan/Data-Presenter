@@ -1,5 +1,5 @@
 # 08_sort_order_alt_order.t
-# Created 11-30-2005 for Data-Presenter-0.69_01
+#$Id: 08_sort_order_alt_order.t 1217 2008-02-10 00:06:02Z jimk $
 use strict;
 use warnings;
 use Test::More 

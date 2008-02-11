@@ -1,5 +1,5 @@
 # 06_fails.t
-# Created 11-24-2005 for Data-Presenter-0.69
+#$Id: 06_fails.t 1217 2008-02-10 00:06:02Z jimk $
 use strict;
 use warnings;
 use Test::More 

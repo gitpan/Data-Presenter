@@ -1,4 +1,5 @@
 # 10_select.t
+#$Id: 10_select.t 1217 2008-02-10 00:06:02Z jimk $
 use strict;
 use warnings;
 use Test::More 

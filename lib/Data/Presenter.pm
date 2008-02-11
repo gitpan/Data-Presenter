@@ -1,5 +1,6 @@
 package Data::Presenter;
-$VERSION = 1.02;    # 12-30-2005
+#$Id: Presenter.pm 1218 2008-02-10 00:11:59Z jimk $
+$VERSION = 1.03;    # 02-10-2008
 use strict;
 use warnings;
 use List::Compare::Functional qw( is_LsubsetR );
@@ -583,7 +584,6 @@ sub writeformat_with_reprocessing {
             $^A,                # the formed line
             $substr_data_ref,   # the points at which I have to splice out
                                 # text from the formed line and amount thereof
-#            $record,            # the current groupID
         );
         print $REPORT $line, "\n";
     }
@@ -613,7 +613,6 @@ sub writeformat_deluxe {
             $^A,                # the formed line
             $substr_data_ref,   # the points at which I have to splice out
                                 # text from the formed line and amount thereof
-#            $record,            # the current groupID
         );
         push @accumulator, $line;
     }
@@ -1007,11 +1006,11 @@ Data::Presenter - Reformat database reports
 
 =head1 VERSION
 
-This document refers to version 1.02 of Data::Presenter, which consists of
+This document refers to version 1.03 of Data::Presenter, which consists of
 Data::Presenter.pm and various packages subclassed thereunder, most notably
 Data::Presenter::Combo.pm and its subclasses
 Data::Presenter::Combo::Intersect.pm and Data::Presenter::Combo::Union.pm.
-This version was released December 30, 2005.
+This version was released February 10, 2008.
 
 =head1 SYNOPSIS
 
@@ -1469,9 +1468,9 @@ Data::Presenter installs in the same way as other Perl extensions available
 from CPAN:  either automatically via the CPAN shell or manually with these
 commands:
 
-    % gunzip Data-Presenter-1.02.tar.gz
-    % tar xf Data-Presenter-1.02.tar
-    % cd Data-Presenter-1.02
+    % gunzip Data-Presenter-1.03.tar.gz
+    % tar xf Data-Presenter-1.03.tar
+    % cd Data-Presenter-1.03
     % perl Makefile.PL
     % make
     % make test
@@ -2875,7 +2874,7 @@ fly'' (L<http://perlmonks.org/?node_id=512460>).
 James E. Keenan (jkeenan@cpan.org).
 
 Creation date:  October 25, 2001.
-Last modification date:  December 30, 2005.
+Last modification date:  February 10, 2008.
 Copyright (c) 2001-5 James E. Keenan.  United States.
 All rights reserved.
 
